@@ -1,8 +1,9 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 public class Frame extends JFrame {
     JTable partTable;
-    JPanel marginPanel, leftPanel, rightPanel, middlePanel;
+    JPanel marginPanelTable, marginPanelSearch, tablePanel, leftPanel, rightPanel, middlePanel;
     JPanel filterPanel;
 
     JTextField searchField;
@@ -29,30 +30,75 @@ public class Frame extends JFrame {
 
         // initializing JTable with custom column size
         PartTableModel tableModel = new PartTableModel(model.filteredParts);
-        partTable = new JTable(tableModel);
-        partTable.setPreferredScrollableViewportSize(new Dimension(200,400));
+        partTable = new JTable(tableModel)
+        {
+            public Component prepareRenderer(
+                    TableCellRenderer renderer, int row, int column)
+            {
+                Component c = super.prepareRenderer(renderer, row, column);
+                JComponent jc = (JComponent)c;
+                jc.setBorder(new MatteBorder(0, 0, 40, 0, Color.decode("#92D050")));
+                jc.setBackground(Color.decode("#385723"));
+                jc.setForeground(Color.WHITE);
+                jc.setFont(new Font("Verdana", Font.BOLD, 13));
+
+                return c;
+            }
+        };
+        partTable.setPreferredScrollableViewportSize(new Dimension(300, 750));
         partTable.getColumnModel().getColumn(0).setPreferredWidth(10);
-        partTable.getColumnModel().getColumn(1).setPreferredWidth(10);
-        partTable.getColumnModel().getColumn(2).setPreferredWidth(20);
-        partTable.getColumnModel().getColumn(3).setPreferredWidth(10);
-        partTable.getColumnModel().getColumn(4).setPreferredWidth(10);
+        partTable.getColumnModel().getColumn(1).setPreferredWidth(30);
+        partTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        partTable.getColumnModel().getColumn(3).setPreferredWidth(8);
+        partTable.getColumnModel().getColumn(4).setPreferredWidth(5);
         partTable.getColumnModel().getColumn(5).setPreferredWidth(10);
-        partTable.getColumnModel().getColumn(6).setPreferredWidth(10);
+        partTable.getColumnModel().getColumn(6).setPreferredWidth(3);
         partTable.getColumnModel().getColumn(7).setPreferredWidth(10);
+
+        partTable.setShowGrid(false);
+        partTable.setBackground(Color.decode("#92D050"));
+
+        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
+        cellRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+
+        for (int i = 0; i < partTable.getRowCount(); i ++)
+            partTable.setRowHeight(i, 80);
+
+        for (int i = 0; i < partTable.getColumnCount(); i ++)
+            if(i != 6)
+                partTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+
         // Set the layout manager for the frame
         setLayout(new BorderLayout());
 
-        marginPanel = new JPanel(new BorderLayout());
-        marginPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        marginPanel.setBackground(Color.GREEN);
+        marginPanelTable = new JPanel(new BorderLayout());
+        marginPanelTable.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        marginPanelTable.setBackground(Color.decode("#92D050"));
+
+        marginPanelSearch = new JPanel(new BorderLayout());
+        marginPanelSearch.setBorder(BorderFactory.createEmptyBorder(5,5,10,5));
+        marginPanelSearch.setBackground(Color.decode("#92D050"));
 
         middlePanel = new JPanel(new BorderLayout());
-        middlePanel.setBackground(Color.GREEN);
-        middlePanel.setPreferredSize(new Dimension(300,300));
+        middlePanel.setBackground(Color.decode("#92D050"));
         searchField = new JTextField();
-        middlePanel.add(searchField, BorderLayout.NORTH);
-        marginPanel.add(new JScrollPane(partTable), BorderLayout.CENTER);
-        middlePanel.add(marginPanel, BorderLayout.CENTER);
+        middlePanel.add(searchField, BorderLayout.CENTER);
+        marginPanelSearch.add(searchField, BorderLayout.CENTER);
+        marginPanelTable.add(marginPanelSearch, BorderLayout.NORTH);
+
+        tablePanel = new JPanel(new BorderLayout());
+        JScrollPane scrollPane = new JScrollPane(partTable);
+        scrollPane.setBackground(Color.decode("#92D050"));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tablePanel.setBackground(Color.decode("#92D050"));
+        tablePanel.add(scrollPane, BorderLayout.NORTH);
+        marginPanelTable.add(tablePanel, BorderLayout.CENTER);
+        middlePanel.add(marginPanelTable, BorderLayout.CENTER);
+
+
+
         add(middlePanel, BorderLayout.CENTER);
         initializeLeft();
         add(leftPanel, BorderLayout.WEST);
