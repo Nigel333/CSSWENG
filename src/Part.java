@@ -1,6 +1,6 @@
 public class Part{
     public String carBrand;
-    public String partBrand;
+    public String carModel;
     public String name;
     public int year;
     public int quantity;
@@ -9,10 +9,10 @@ public class Part{
     public String authenticity;
 
 
-    Part(String carBrand, String partBrand, String name, int year, int quantity, double price, boolean isNew, String authenticity)
+    Part(String carBrand, String carModel, String name, int year, int quantity, double price, boolean isNew, String authenticity)
     {
         this.carBrand = carBrand;
-        this.partBrand = partBrand;
+        this.carModel = carModel;
         this.name = name;
         this.year = year;
         this.quantity = quantity;
@@ -25,11 +25,11 @@ public class Part{
     public boolean equals(Object o)
     {
         Part part = (Part) o;
-        return this.partBrand.equals(part.partBrand) && this.name.equals(part.name) && this.isNew == part.isNew && this.authenticity.equals(part.authenticity);
+        return this.carModel.equals(part.carModel) && this.name.equals(part.name) && this.isNew == part.isNew && this.authenticity.equals(part.authenticity);
     }
 
     @Override
     public String toString() {
-        return carBrand + '\t' + partBrand + '\t' + String.valueOf(year) + '\t' + String.valueOf(quantity) + '\t' + String.valueOf(price) + '\t' + String.valueOf(price) + '\t' + authenticity;
+        return carBrand + '\t' + carModel + '\t' + String.valueOf(year) + '\t' + String.valueOf(quantity) + '\t' + String.valueOf(price) + '\t' + String.valueOf(price) + '\t' + authenticity;
     }
 }
