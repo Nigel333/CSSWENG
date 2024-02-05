@@ -31,7 +31,7 @@ public class Frame extends JFrame {
 
         // Set frame properties
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null); // Center the frame on the screen
         setVisible(true);
     }
