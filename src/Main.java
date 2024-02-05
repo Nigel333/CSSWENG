@@ -29,14 +29,15 @@ public class Main{
                 Row nextRow = iterator.next();
                 Iterator<Cell> cellIterator=  nextRow.cellIterator();
 
+                String partBrand = cellIterator.next().getStringCellValue();
                 String name = cellIterator.next().getStringCellValue();
                 int year = (int) cellIterator.next().getNumericCellValue();
                 int quantity = (int) cellIterator.next().getNumericCellValue();
                 double price = cellIterator.next().getNumericCellValue();
                 boolean isNew = "YES".equals(cellIterator.next().getStringCellValue());
-                boolean isOriginal = "YES".equals(cellIterator.next().getStringCellValue());
+                String authenticity = cellIterator.next().getStringCellValue();
 
-                model.parts.add(new Part(sheet.getSheetName(), name, year, quantity, price, isNew, isOriginal));
+                model.parts.add(new Part(sheet.getSheetName(), partBrand, name, year, quantity, price, isNew, authenticity));
             }
         }
 
@@ -49,7 +50,7 @@ public class Main{
 
         for (Part part : model.parts)
         {
-            System.out.println(part.name);
+            System.out.println(part);
         }
     }
 }
