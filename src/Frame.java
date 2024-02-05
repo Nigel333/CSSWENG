@@ -9,6 +9,9 @@ public class Frame extends JFrame {
     JPanel filterPanel;
     JTextField searchField;
 
+    JLabel clock, account, setting;
+    ImageIcon accountIcon;
+
     public Frame(Main model) {
         super("Item Database");
 
@@ -55,10 +58,53 @@ public class Frame extends JFrame {
     protected void initializeLeft()
     {
         leftPanel = new JPanel(new BorderLayout());
-        leftPanel.add(new JLabel("Logo and Time"), BorderLayout.NORTH);
+        leftPanel.setPreferredSize(new Dimension(200, 0));
+
+        logoAndTimePanel = new JPanel(new BorderLayout());
+        logoAndTimePanel.setBackground(Color.DARK_GRAY);
+        logoAndTimePanel.setPreferredSize(new Dimension(0, 100));
+
+        clock = new JLabel();
+        clock.setForeground(Color.WHITE);
+        clock.setFont(new Font("Arial", 1, 15));
+        Timer t = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clock.setText("<html><h2 style=\"color:\"white\"\"; padding-right: 50px>" + new Date().toLocaleString().split(", ")[0] + ", " + new Date().toLocaleString().split(", ")[1] + "<br>" + new Date().toLocaleString().split(", ")[2] + "</h2>");
+            }
+        });
+        t.start();
+        clock.setBorder(new EmptyBorder(0, 0, 0, 10));
+
+        ImageIcon logoIcon = new ImageIcon("resources/logo.png");
+        JLabel logo = new JLabel(logoIcon);
+        logo.setBorder(new EmptyBorder(0, 10, 0, 0));
+        logoAndTimePanel.add(logo, BorderLayout.WEST);
+
+        logoAndTimePanel.add(clock, BorderLayout.EAST);
+
         filterPanel = new JPanel();
+        filterPanel.setBackground(Color.GRAY);
+        filterPanel.setPreferredSize(new Dimension(0,0));
+
+        accountPanel = new JPanel(new BorderLayout());
+        accountPanel.setBackground(Color.DARK_GRAY);
+        accountPanel.setPreferredSize(new Dimension(0, 60));
+        accountPanel.add(new JLabel());
+
+        accountIcon = new ImageIcon("resources/regular.png");
+        account = new JLabel(accountIcon);
+        account.setBorder(new EmptyBorder(0, 10, 0, 0));
+        accountPanel.add(account, BorderLayout.WEST);
+
+        ImageIcon settingIcon = new ImageIcon("resources/settings.png");
+        setting = new JLabel(settingIcon);
+        setting.setBorder(new EmptyBorder(0, 0, 0, 10));
+        accountPanel.add(setting, BorderLayout.EAST);
+
+        leftPanel.add(logoAndTimePanel, BorderLayout.NORTH);
+        leftPanel.add(accountPanel, BorderLayout.SOUTH);
         leftPanel.add(filterPanel, BorderLayout.CENTER);
-        leftPanel.add(new JLabel("Account Details"), BorderLayout.SOUTH);
     }
     protected void initializeRight()
     {
