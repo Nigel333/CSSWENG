@@ -2,17 +2,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
+
 public class Main{
     ArrayList<Part> parts = new ArrayList<>();
-    ArrayList<Part> filteredParts = parts;
-
+    PartTableModel tableModel;
 
     public static void main(String[] args) throws IOException {
         Main model = new Main();
@@ -50,7 +49,72 @@ public class Main{
             }
         });
 
+        model.tableModel = new PartTableModel(model.parts);
+
         Frame view = new Frame(model);
         Controller controller = new Controller(view);
+    }
+}
+class PartTableModel extends AbstractTableModel {
+    private ArrayList<Part> parts;
+    private String[] columnNames = {"Car Brand", "Car Model", "Name", "Year", "Quantity", "Price", "Is New", "Authenticity"};
+
+    public PartTableModel(ArrayList<Part> parts) {
+        this.parts = parts;
+    }
+
+    @Override
+    public int getRowCount() {
+        return parts.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return columnNames.length;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Part part = parts.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                return part.carBrand;
+            case 1:
+                return part.carModel;
+            case 2:
+                return part.name;
+            case 3:
+                return part.year;
+            case 4:
+                return part.quantity;
+            case 5:
+                return part.price;
+            case 6:
+                return part.isNew;
+            case 7:
+                return part.authenticity;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return columnNames[column];
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        // Return the appropriate class for each column
+        if (columnIndex == 6) {
+            return Boolean.class; // "Is New" column is of boolean type
+        } else {
+            return super.getColumnClass(columnIndex);
+        }
+    }
+
+    public void changeParts(ArrayList<Part> parts)
+    {
+        this.parts = parts;
     }
 }

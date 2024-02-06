@@ -30,6 +30,6 @@ public class Part{
 
     @Override
     public String toString() {
-        return carBrand + '\t' + carModel + '\t' + String.valueOf(year) + '\t' + String.valueOf(quantity) + '\t' + String.valueOf(price) + '\t' + String.valueOf(price) + '\t' + authenticity;
+        return carBrand + '\t' + carModel + '\t' + name + '\t' + String.valueOf(year) + '\t' + authenticity;
     }
 }

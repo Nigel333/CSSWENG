@@ -1,19 +1,20 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Frame extends JFrame {
+    Main model;
     JTable partTable;
     JPanel marginPanelTable, marginPanelSearch, tablePanel, leftPanel, rightPanel, middlePanel;
     JPanel filterPanel;
+    JComboBox sortBy, order;
 
     JTextField searchField;
 
@@ -27,13 +28,13 @@ public class Frame extends JFrame {
 
     public Frame(Main model) {
         super("Item Database");
+        this.model = model;
 
         // initializing JTable with custom column size
-        PartTableModel tableModel = new PartTableModel(model.filteredParts);
-        partTable = new JTable(tableModel)
+
+        partTable = new JTable(model.tableModel)
         {
-            public Component prepareRenderer(
-                    TableCellRenderer renderer, int row, int column)
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
             {
                 Component c = super.prepareRenderer(renderer, row, column);
                 JComponent jc = (JComponent)c;
@@ -83,6 +84,7 @@ public class Frame extends JFrame {
         middlePanel = new JPanel(new BorderLayout());
         middlePanel.setBackground(Color.decode("#92D050"));
         searchField = new JTextField();
+        searchField.setFont(new Font("Verdana", Font.BOLD, 18));
         middlePanel.add(searchField, BorderLayout.CENTER);
         marginPanelSearch.add(searchField, BorderLayout.CENTER);
         marginPanelTable.add(marginPanelSearch, BorderLayout.NORTH);
@@ -97,14 +99,11 @@ public class Frame extends JFrame {
         marginPanelTable.add(tablePanel, BorderLayout.CENTER);
         middlePanel.add(marginPanelTable, BorderLayout.CENTER);
 
-
-
         add(middlePanel, BorderLayout.CENTER);
         initializeLeft();
         add(leftPanel, BorderLayout.WEST);
         initializeRight();
         add(rightPanel, BorderLayout.EAST);
-
 
         // Set frame properties
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,6 +143,11 @@ public class Frame extends JFrame {
         filterPanel = new JPanel();
         filterPanel.setBackground(Color.GRAY);
         filterPanel.setPreferredSize(new Dimension(0,0));
+        sortBy = new JComboBox<>(new String[]{"Car Brand", "Car Model", "Name", "Year", "Quantity", "Price", "isNew", "Authenticity"});
+        order = new JComboBox<>(new String[]{"Asc", "Desc"});
+        filterPanel.add(new JLabel("Sort By:"));
+        filterPanel.add(sortBy);
+        filterPanel.add(order);
 
         accountPanel = new JPanel(new BorderLayout());
         accountPanel.setBackground(Color.DARK_GRAY);
@@ -230,64 +234,5 @@ class CartButton extends JButton {
         this.setText("<html><body style = margin:20px 35px></body></html>");
         this.setBackground(Color.decode("#1B5489"));
         this.setPreferredSize(new Dimension(40, 70));
-    }
-}
-
-class PartTableModel extends AbstractTableModel {
-    private ArrayList<Part> parts;
-    private String[] columnNames = {"Car Brand", "Car Model", "Name", "Year", "Quantity", "Price", "Is New", "Authenticity"};
-
-    public PartTableModel(ArrayList<Part> parts) {
-        this.parts = parts;
-    }
-
-    @Override
-    public int getRowCount() {
-        return parts.size();
-    }
-
-    @Override
-    public int getColumnCount() {
-        return columnNames.length;
-    }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        Part part = parts.get(rowIndex);
-        switch (columnIndex) {
-            case 0:
-                return part.carBrand;
-            case 1:
-                return part.carModel;
-            case 2:
-                return part.name;
-            case 3:
-                return part.year;
-            case 4:
-                return part.quantity;
-            case 5:
-                return part.price;
-            case 6:
-                return part.isNew;
-            case 7:
-                return part.authenticity;
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public String getColumnName(int column) {
-        return columnNames[column];
-    }
-
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        // Return the appropriate class for each column
-        if (columnIndex == 6) {
-            return Boolean.class; // "Is New" column is of boolean type
-        } else {
-            return super.getColumnClass(columnIndex);
-        }
     }
 }
