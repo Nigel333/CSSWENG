@@ -1,6 +1,5 @@
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -51,6 +50,7 @@ public class Main{
             }
         });
 
-        Frame frame = new Frame(model);
+        Frame view = new Frame(model);
+        Controller controller = new Controller(view);
     }
 }
