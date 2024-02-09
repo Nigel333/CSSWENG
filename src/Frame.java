@@ -3,7 +3,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,7 +40,7 @@ public class Frame extends JFrame {
                 jc.setBorder(new MatteBorder(0, 0, 40, 0, Color.decode("#92D050")));
                 jc.setBackground(Color.decode("#385723"));
                 jc.setForeground(Color.WHITE);
-                jc.setFont(new Font("Verdana", Font.BOLD, 13));
+                jc.setFont(new Font("Verdana", Font.BOLD, 11));
 
                 return c;
             }
@@ -74,7 +73,7 @@ public class Frame extends JFrame {
         setLayout(new BorderLayout());
 
         marginPanelTable = new JPanel(new BorderLayout());
-        marginPanelTable.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        marginPanelTable.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         marginPanelTable.setBackground(Color.decode("#92D050"));
 
         marginPanelSearch = new JPanel(new BorderLayout());
@@ -127,7 +126,8 @@ public class Frame extends JFrame {
         Timer t = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clock.setText("<html><h2 style=\"color: white; padding:5px; border-style: solid; border-color: white\">" + new Date().toLocaleString().split(", ")[0] + ", " + new Date().toLocaleString().split(", ")[1] + "<br>" + new Date().toLocaleString().split(", ")[2] + "</h2>");
+                clock.setText("<html><h2 style=\"color: white; padding:5px; border-style: solid; border-color: white\">" + new Date().toLocaleString().split(", ")[0]
+                            + "<br>" + new Date().toLocaleString().split(", ")[1] + "</h2>");
             }
         });
         t.start();
@@ -172,12 +172,22 @@ public class Frame extends JFrame {
     {
         rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBackground(Color.decode("#4472C4"));
+        rightPanel.setPreferredSize(new Dimension(345,0));
         stepsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         cart = new StepButton("Cart");
-        cart.setEnabled(true);
+        cart.setPreferredSize(new Dimension(77,50));
+        cart.setFont(new Font("Verdana", Font.BOLD, 11));
+        //cart.setEnabled(true);
         checkout = new StepButton("Checkout");
+        checkout.setPreferredSize(new Dimension(93,50));
+        checkout.setFont(new Font("Verdana", Font.BOLD, 11));
+
         payment = new StepButton("Payment");
+        payment.setPreferredSize(new Dimension(93,50));
+        payment.setFont(new Font("Verdana", Font.BOLD, 11));
         receipt = new StepButton("Receipt");
+        receipt.setPreferredSize(new Dimension(82,50));
+        receipt.setFont(new Font("Verdana", Font.BOLD, 11));
 
         stepsPanel.add(cart);
         stepsPanel.add(checkout);
@@ -188,12 +198,20 @@ public class Frame extends JFrame {
         cartsList = new JPanel();
         cartsList.setBackground(Color.decode("#4472C4"));
         cartsList.setLayout(new BoxLayout(cartsList, BoxLayout.Y_AXIS));
-        cartsList.add(new CartButton());
-        cartsList.add(new CartButton());
-        cartsList.setBorder(new EmptyBorder(50,0,0,0));
+        CartButton firstCart = new CartButton("1");
+        firstCart.setEnabled(true);
+        firstCart.setForeground(Color.WHITE);
+        cartsList.add(firstCart);
+        cartsList.add(new CartButton("2"));
+        cartsList.add(new CartButton("3"));
+        cartsList.add(new CartButton("4"));
+        cartsList.add(new CartButton("5"));
+        cartsList.setBorder(new EmptyBorder(0,0,0,0));
 
         rightDisplay = new JPanel(new BorderLayout());
         displayScreen = new JPanel();
+        JLabel tempLabel = new JLabel("This is the cart panel");
+        displayScreen.add(tempLabel);
         displayScreen.setBorder(new EmptyBorder(40, 40, 40, 40));
         displayScreen.setBackground(Color.CYAN);
         rightDisplay.add(displayScreen, BorderLayout.CENTER);
@@ -201,6 +219,51 @@ public class Frame extends JFrame {
         rightPanel.add(stepsPanel,BorderLayout.NORTH);
         rightPanel.add(cartsList, BorderLayout.WEST);
         rightPanel.add(rightDisplay, BorderLayout.CENTER);
+
+        cart.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                rightDisplay.remove(displayScreen);
+                JPanel displayScreen = new JPanel();
+                displayScreen.setBackground(Color.CYAN); 
+                JLabel label = new JLabel("This is the cart panel");
+                displayScreen.add(label);
+                rightDisplay.add(displayScreen, BorderLayout.CENTER);
+
+            }
+        });
+        checkout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                rightDisplay.remove(displayScreen);
+                JPanel displayScreen = new JPanel();
+                displayScreen.setBackground(Color.CYAN);
+                JLabel label = new JLabel("This is the checkout panel");
+                displayScreen.add(label);
+                rightDisplay.add(displayScreen, BorderLayout.CENTER);
+
+            }
+        });
+        payment.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                rightDisplay.remove(displayScreen);
+                JPanel displayScreen = new JPanel();
+                displayScreen.setBackground(Color.CYAN);
+                JLabel label = new JLabel("This is the payment panel");
+                displayScreen.add(label);
+                rightDisplay.add(displayScreen, BorderLayout.CENTER);
+
+            }
+        });
+        receipt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                rightDisplay.remove(displayScreen);
+                JPanel displayScreen = new JPanel();
+                displayScreen.setBackground(Color.CYAN);
+                JLabel label = new JLabel("This is the receipt panel my guy");
+                displayScreen.add(label);
+                rightDisplay.add(displayScreen, BorderLayout.CENTER);
+
+            }
+        });
     }
 }
 class StepButton extends JButton {
@@ -210,7 +273,8 @@ class StepButton extends JButton {
         this.setBackground(Color.decode("#0080FF"));
         this.setForeground(Color.WHITE);
         this.setPreferredSize(new Dimension(100, 50));
-        this.setEnabled(false);
+        this.setEnabled(true);
+        this.setFocusPainted(false);
     }
 
     @Override
@@ -229,10 +293,23 @@ class StepButton extends JButton {
 }
 
 class CartButton extends JButton {
-    public CartButton()
+    private static JButton currentButton = null;
+    public CartButton(String text)
     {
-        this.setText("<html><body style = margin:20px 35px></body></html>");
+
+        this.setText("<html><body style = margin:15px 0px 15px 150px>"+ text +"</body></html>");
         this.setBackground(Color.decode("#1B5489"));
-        this.setPreferredSize(new Dimension(40, 70));
+        this.setPreferredSize(new Dimension(77, 100));
+        this.setFocusPainted(false);
+
+        this.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (currentButton != null) {
+                    currentButton.setForeground(null);
+                }
+                currentButton = CartButton.this;
+                    CartButton.this.setForeground(Color.WHITE);
+            }
+        });
     }
 }
