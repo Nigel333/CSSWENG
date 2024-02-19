@@ -263,7 +263,7 @@ public class Controller {
     public void filter() {
         try {
             ArrayList<Part> filtered = new ArrayList<>();
-            String text = this.view.searchField.getText();
+            String text = this.view.searchField.getText().toLowerCase();
 
             for(Part part : model.parts)
             {
