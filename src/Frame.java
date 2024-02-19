@@ -23,7 +23,8 @@ public class Frame extends JFrame {
 
     JPanel logoAndTimePanel, accountPanel;
 
-    JLabel clock, account, setting;
+    JLabel clock, setting;
+    JButton account;
     ImageIcon accountIcon;
 
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
@@ -216,8 +217,10 @@ public class Frame extends JFrame {
         accountPanel.add(new JLabel());
 
         accountIcon = new ImageIcon("resources/regular.png");
-        account = new JLabel(accountIcon);
-        account.setBorder(new EmptyBorder(0, 10, 0, 0));
+        account = new JButton(accountIcon);
+        account.setBorderPainted(false);
+        account.setMargin(new Insets(0, 0, 0, 0));
+        account.setContentAreaFilled(false);
         accountPanel.add(account, BorderLayout.WEST);
 
         ImageIcon settingIcon = new ImageIcon("resources/settings.png");

@@ -12,6 +12,7 @@ public class Main{
     ArrayList<Part> parts = new ArrayList<>();
     PartTableModel tableModel;
     ArrayList<String> carBrands;
+    boolean isManager = false;
 
     public static void main(String[] args) throws IOException {
         Main model = new Main();

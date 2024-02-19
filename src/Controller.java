@@ -1,3 +1,4 @@
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -259,6 +260,43 @@ public class Controller {
             }
         });
 
+        this.view.account.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.account.setEnabled(false);
+                if (!model.isManager)
+                {
+                    String password = "";
+                    Object[] option = {"Enter"};
+                    JPasswordField passwordField = new JPasswordField();
+                    if(JOptionPane.showOptionDialog(null, passwordField, "Please Enter the Password", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]) == 0)
+                        password = passwordField.getText();
+                    if(password.equals("password"))
+                    {
+                        view.account.setIcon(new ImageIcon("resources/manager.png"));
+                        model.isManager = true;
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null, "Wrong Password Inputted. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                {
+                    int choice = JOptionPane.showConfirmDialog(
+                            null,
+                            "Would you like to logout?",
+                            "Logout",
+                            JOptionPane.YES_NO_OPTION);
+                    if(choice == JOptionPane.YES_OPTION)
+                    {
+                        view.account.setIcon(new ImageIcon("resources/regular.png"));
+                        model.isManager = false;
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null, "Did Not Logout.", "", JOptionPane.PLAIN_MESSAGE);
+                }
+                view.account.setEnabled(true);
+            }
+        });
     }
     public void filter() {
         try {
