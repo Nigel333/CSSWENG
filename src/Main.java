@@ -7,11 +7,11 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableRowSorter;
 
 public class Main{
     ArrayList<Part> parts = new ArrayList<>();
     PartTableModel tableModel;
+    ArrayList<String> carBrands;
 
     public static void main(String[] args) throws IOException {
         Main model = new Main();
@@ -21,9 +21,11 @@ public class Main{
         XSSFWorkbook workbook=(XSSFWorkbook)WorkbookFactory.create(file,password);
         Iterator<Sheet> sheets = workbook.sheetIterator();
 
+        model.carBrands = new ArrayList<>();
         while(sheets.hasNext())
         {
             Sheet sheet = sheets.next();
+            model.carBrands.add(sheet.getSheetName());
             Iterator<Row> iterator=sheet.iterator();
 
             while(iterator.hasNext()) {

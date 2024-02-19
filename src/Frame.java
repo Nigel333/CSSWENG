@@ -3,18 +3,21 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Frame extends JFrame {
     Main model;
     JTable partTable;
     JPanel marginPanelTable, marginPanelSearch, tablePanel, leftPanel, rightPanel, middlePanel;
     JPanel filterPanel;
-    JComboBox sortBy, order;
+    JComboBox sortBy, order, brandFilter, modelFilter, newFilter, authenticityFilter;;
+    JTextField fromYear, toYear, fromPrice, toPrice;
+    JCheckBox fromYearCheck, toYearCheck, fromPriceCheck, toPriceCheck;
 
     JTextField searchField;
 
@@ -141,6 +144,7 @@ public class Frame extends JFrame {
         logoAndTimePanel.add(clock, BorderLayout.EAST);
 
         filterPanel = new JPanel();
+        filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.Y_AXIS));
         filterPanel.setBackground(Color.GRAY);
         filterPanel.setPreferredSize(new Dimension(0,0));
         sortBy = new JComboBox<>(new String[]{"Car Brand", "Car Model", "Name", "Year", "Quantity", "Price", "isNew", "Authenticity"});
@@ -148,6 +152,62 @@ public class Frame extends JFrame {
         filterPanel.add(new JLabel("Sort By:"));
         filterPanel.add(sortBy);
         filterPanel.add(order);
+        // brandFilter, modelFilter, fromYear, toYear, fromPrice, toPrice, newFilter, authenticityFilter;
+
+        brandFilter = new JComboBox(new String[]{"---"});
+        for (String brand: model.carBrands)
+            brandFilter.addItem(brand);
+        modelFilter = new JComboBox(new String[]{"---"});
+        Set<String> models = new HashSet<>();
+        for (Part part: model.parts)
+            models.add(part.carModel);
+        for (String str: models)
+            modelFilter.addItem(str);
+
+        fromYear = new JTextField(10);
+        fromYear.setEnabled(false);
+        fromYear.setBackground(Color.decode("#C6C6C6"));
+        toYear = new JTextField(10);
+        toYear.setEnabled(false);
+        toYear.setBackground(Color.decode("#C6C6C6"));
+        fromPrice = new JTextField(10);
+        fromPrice.setEnabled(false);
+        fromPrice.setBackground(Color.decode("#C6C6C6"));
+        toPrice = new JTextField(10);
+        toPrice.setEnabled(false);
+        toPrice.setBackground(Color.decode("#C6C6C6"));
+
+        fromYearCheck = new JCheckBox();
+        toYearCheck = new JCheckBox();
+        fromPriceCheck = new JCheckBox();
+        toPriceCheck = new JCheckBox();
+
+        newFilter = new JComboBox<>(new String[]{"---", "NEW", "OLD"});
+        authenticityFilter = new JComboBox<>(new String[]{"---", "ORIGINAL", "CLASS A", "OTHERS"});
+
+        filterPanel.add(new JLabel("Filter"));
+        filterPanel.add(new JLabel("Brand:"));
+
+        filterPanel.add(new JLabel("Car Brand"));
+        filterPanel.add(brandFilter);
+        filterPanel.add(new JLabel("Car Model"));
+        filterPanel.add(modelFilter);
+        filterPanel.add(new JLabel("Year Range"));
+        filterPanel.add(fromYearCheck);
+        filterPanel.add(fromYear);
+        filterPanel.add(new JLabel("to"));
+        filterPanel.add(toYearCheck);
+        filterPanel.add(toYear);
+        filterPanel.add(new JLabel("Price Range"));
+        filterPanel.add(fromPriceCheck);
+        filterPanel.add(fromPrice);
+        filterPanel.add(new JLabel("to"));
+        filterPanel.add(toPriceCheck);
+        filterPanel.add(toPrice);
+        filterPanel.add(new JLabel("Condition"));
+        filterPanel.add(newFilter);
+        filterPanel.add(new JLabel("Authenticity"));
+        filterPanel.add(authenticityFilter);
 
         accountPanel = new JPanel(new BorderLayout());
         accountPanel.setBackground(Color.DARK_GRAY);
