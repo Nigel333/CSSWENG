@@ -1,9 +1,11 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -50,6 +52,7 @@ public class Frame extends JFrame {
                 return c;
             }
         };
+
         partTable.setPreferredScrollableViewportSize(new Dimension(300, 750));
         partTable.getColumnModel().getColumn(0).setPreferredWidth(10);
         partTable.getColumnModel().getColumn(1).setPreferredWidth(30);
@@ -73,6 +76,48 @@ public class Frame extends JFrame {
         for (int i = 0; i < partTable.getColumnCount(); i ++)
             if(i != 6)
                 partTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+
+        partTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                if (me.getClickCount() == 2) {
+                    JTable target = (JTable) me.getSource();
+                    int row = target.getSelectedRow();
+                    JPanel panel = new JPanel();
+                    JPanel panelBot = new JPanel();
+                    panel.setLayout(new BorderLayout());
+                    panel.setPreferredSize(new Dimension(250,100));
+                    JLabel label = new JLabel("Buy " + partTable.getValueAt(row,1) + " " + partTable.getValueAt(row,2) + "?");
+                    label.setHorizontalAlignment(JLabel.CENTER);
+                    JButton buyButton = new JButton("Add to Cart");
+                    JButton cancelButton = new JButton("Cancel");
+                    panel.add(label, BorderLayout.CENTER);
+                    panelBot.add(buyButton, BorderLayout.WEST);
+                    panelBot.add(cancelButton, BorderLayout.EAST);
+                    panel.add(panelBot, BorderLayout.SOUTH);
+
+                    JDialog dialog = new JDialog();
+                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    dialog.getContentPane().add(panel);
+                    dialog.pack();
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setVisible(true);
+
+                    buyButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            JOptionPane.showMessageDialog(dialog, "Added to Cart!");
+                            dialog.dispose();
+                        }
+                    });
+
+                    cancelButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            dialog.dispose();
+                        }
+                    });
+
+                }
+            }
+        });
 
         // Set the layout manager for the frame
         setLayout(new BorderLayout());
