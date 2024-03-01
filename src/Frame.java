@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,9 +29,10 @@ public class Frame extends JFrame {
     JLabel clock, setting;
     JButton account;
     ImageIcon accountIcon;
-
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
+    JPanel cartPanel, checkoutPanel, paymentPanel, receiptPanel;
     StepButton cart, checkout, payment, receipt;
+    ArrayList<CartButton> cartButtons = new ArrayList<>();
 
     public Frame(Main model) {
         super("Item Database");
@@ -307,72 +309,35 @@ public class Frame extends JFrame {
         cartsList = new JPanel();
         cartsList.setBackground(Color.decode("#4472C4"));
         cartsList.setLayout(new BoxLayout(cartsList, BoxLayout.Y_AXIS));
-        CartButton firstCart = new CartButton("1");
-        firstCart.setEnabled(true);
-        firstCart.setForeground(Color.WHITE);
-        cartsList.add(firstCart);
-        cartsList.add(new CartButton("2"));
-        cartsList.add(new CartButton("3"));
-        cartsList.add(new CartButton("4"));
-        cartsList.add(new CartButton("5"));
+
+        for(int i = 1; i < 6; i++)
+            cartButtons.add(new CartButton(i));
+        for(int i = 0; i < cartButtons.size(); i++)
+            cartsList.add(cartButtons.get(i));
+        cartButtons.get(model.currCart - 1).setEnabled(false);
+
         cartsList.setBorder(new EmptyBorder(0,0,0,0));
 
         rightDisplay = new JPanel(new BorderLayout());
-        displayScreen = new JPanel();
-        JLabel tempLabel = new JLabel("This is the cart panel");
-        displayScreen.add(tempLabel);
-        displayScreen.setBorder(new EmptyBorder(40, 40, 40, 40));
-        displayScreen.setBackground(Color.CYAN);
+
+        cartPanel = new JPanel();
+        cartPanel.add(new JLabel("This is the CART. ヾ(≧▽≦*)o"));
+
+        checkoutPanel = new JPanel();
+        checkoutPanel.add(new JLabel("This is the CHECKOUT. ヾ(≧▽≦*)o"));
+
+        paymentPanel = new JPanel();
+        paymentPanel.add(new JLabel("This is the PAYMENT. ヾ(≧▽≦*)o"));
+
+        receiptPanel = new JPanel();
+        receiptPanel.add(new JLabel("This is the RECEIPT. ヾ(≧▽≦*)o"));
+
+        displayScreen = cartPanel;
         rightDisplay.add(displayScreen, BorderLayout.CENTER);
 
         rightPanel.add(stepsPanel,BorderLayout.NORTH);
         rightPanel.add(cartsList, BorderLayout.WEST);
         rightPanel.add(rightDisplay, BorderLayout.CENTER);
-
-        cart.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                rightDisplay.remove(displayScreen);
-                JPanel displayScreen = new JPanel();
-                displayScreen.setBackground(Color.CYAN); 
-                JLabel label = new JLabel("This is the cart panel");
-                displayScreen.add(label);
-                rightDisplay.add(displayScreen, BorderLayout.CENTER);
-
-            }
-        });
-        checkout.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                rightDisplay.remove(displayScreen);
-                JPanel displayScreen = new JPanel();
-                displayScreen.setBackground(Color.CYAN);
-                JLabel label = new JLabel("This is the checkout panel");
-                displayScreen.add(label);
-                rightDisplay.add(displayScreen, BorderLayout.CENTER);
-
-            }
-        });
-        payment.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                rightDisplay.remove(displayScreen);
-                JPanel displayScreen = new JPanel();
-                displayScreen.setBackground(Color.CYAN);
-                JLabel label = new JLabel("This is the payment panel");
-                displayScreen.add(label);
-                rightDisplay.add(displayScreen, BorderLayout.CENTER);
-
-            }
-        });
-        receipt.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                rightDisplay.remove(displayScreen);
-                JPanel displayScreen = new JPanel();
-                displayScreen.setBackground(Color.CYAN);
-                JLabel label = new JLabel("This is the receipt panel my guy");
-                displayScreen.add(label);
-                rightDisplay.add(displayScreen, BorderLayout.CENTER);
-
-            }
-        });
     }
 }
 class StepButton extends JButton {
@@ -402,23 +367,27 @@ class StepButton extends JButton {
 }
 
 class CartButton extends JButton {
-    private static JButton currentButton = null;
-    public CartButton(String text)
+    int num;
+    public CartButton(int num)
     {
-
-        this.setText("<html><body style = margin:15px 0px 15px 150px>"+ text +"</body></html>");
-        this.setBackground(Color.decode("#1B5489"));
-        this.setPreferredSize(new Dimension(77, 100));
+        this.setText("<html><body style=\"margin:15px 0px;color:white\">" + num + "</body></html>");
+        this.setBackground(Color.decode("#203864"));
+        this.setPreferredSize(new Dimension(60, 100));
         this.setFocusPainted(false);
+        this.num = num;
+    }
 
-        this.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (currentButton != null) {
-                    currentButton.setForeground(null);
-                }
-                currentButton = CartButton.this;
-                    CartButton.this.setForeground(Color.WHITE);
-            }
-        });
+    @Override
+    public void setEnabled(boolean b)
+    {
+        super.setEnabled(b);
+        if (b)
+        {
+            this.setBackground(Color.decode("#203864"));
+        }
+        else
+        {
+            this.setBackground(Color.decode("#7AA4CC"));
+        }
     }
 }

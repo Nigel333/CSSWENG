@@ -297,6 +297,62 @@ public class Controller {
                 view.account.setEnabled(true);
             }
         });
+
+
+        for (CartButton cartButton :  view.cartButtons)
+        {
+            cartButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    view.cartButtons.get(model.currCart - 1).setEnabled(true);
+                    model.currCart = cartButton.num;
+                    cartButton.setEnabled(false);
+
+                    view.rightDisplay.remove(view.displayScreen);
+                    view.displayScreen = view.cartPanel;
+                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                    view.rightDisplay.repaint();
+                    view.rightDisplay.revalidate();
+                }
+            });
+        }
+
+        view.cart.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                view.rightDisplay.remove(view.displayScreen);
+                view.displayScreen = view.cartPanel;
+                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                view.rightDisplay.repaint();
+                view.rightDisplay.revalidate();
+            }
+        });
+        view.checkout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                view.rightDisplay.remove(view.displayScreen);
+                view.displayScreen = view.checkoutPanel;
+                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                view.rightDisplay.repaint();
+                view.rightDisplay.revalidate();
+            }
+        });
+        view.payment.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                view.rightDisplay.remove(view.displayScreen);
+                view.displayScreen = view.paymentPanel;
+                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                view.rightDisplay.repaint();
+                view.rightDisplay.revalidate();
+            }
+        });
+        view.receipt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                view.rightDisplay.remove(view.displayScreen);
+                view.displayScreen = view.receiptPanel;
+                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                view.rightDisplay.repaint();
+                view.rightDisplay.revalidate();
+            }
+        });
     }
     public void filter() {
         try {

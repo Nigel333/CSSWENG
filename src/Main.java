@@ -13,6 +13,7 @@ public class Main{
     PartTableModel tableModel;
     ArrayList<String> carBrands;
     boolean isManager = false;
+    int currCart = 1;
 
     public static void main(String[] args) throws IOException {
         Main model = new Main();
