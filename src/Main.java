@@ -13,6 +13,8 @@ public class Main{
     ArrayList<String> carBrands;
     PartTableModel tableModel;
     boolean isManager = false;
+    int currCart = 1;
+    ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         Main model = new Main();
@@ -44,6 +46,10 @@ public class Main{
                 model.parts.add(new Part(sheet.getSheetName(), partBrand, name, year, quantity, price, isNew, authenticity));
             }
         }
+
+        for(int i = 1; i <= 5; i++)
+            model.shoppingCarts.add(new ShoppingCart(i));
+
 
         Collections.sort(model.parts, new Comparator<Part>() {
             @Override
