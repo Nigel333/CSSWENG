@@ -319,51 +319,35 @@ public class Controller {
 
         view.cart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                /* for future use
                 view.rightDisplay.remove(view.displayScreen);
                 view.displayScreen = view.cartPanel;
                 view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                 view.rightDisplay.repaint();
                 view.rightDisplay.revalidate();
+                */
 
-                view.checkout.setEnabled(true);
+                view.checkout.setEnabled(false);
                 view.payment.setEnabled(false);
                 view.receipt.setEnabled(false);
             }
         });
         view.checkout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                view.rightDisplay.remove(view.displayScreen);
-                view.displayScreen = view.checkoutPanel;
-                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                view.rightDisplay.repaint();
-                view.rightDisplay.revalidate();
-
-                view.cart.setEnabled(true);
-                view.payment.setEnabled(true);
+                view.cart.setEnabled(false);
+                view.payment.setEnabled(false);
                 view.receipt.setEnabled(false);
             }
         });
         view.payment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                view.rightDisplay.remove(view.displayScreen);
-                view.displayScreen = view.paymentPanel;
-                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                view.rightDisplay.repaint();
-                view.rightDisplay.revalidate();
-
                 view.cart.setEnabled(false);
-                view.checkout.setEnabled(true);
-                view.receipt.setEnabled(true);
+                view.checkout.setEnabled(false);
+                view.receipt.setEnabled(false);
             }
         });
         view.receipt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                view.rightDisplay.remove(view.displayScreen);
-                view.displayScreen = view.receiptPanel;
-                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                view.rightDisplay.repaint();
-                view.rightDisplay.revalidate();
-
                 view.cart.setEnabled(false);
                 view.checkout.setEnabled(false);
                 view.payment.setEnabled(false);
