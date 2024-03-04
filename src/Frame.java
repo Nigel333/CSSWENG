@@ -16,15 +16,15 @@ public class Frame extends JFrame {
     Main model;
     JTable partTable;
     JPanel marginPanelTable, marginPanelSearch, tablePanel, leftPanel, rightPanel, middlePanel;
-    JPanel filterPanel;
+    JPanel filterPanel,
+            firstFilter, secondFilter, thirdFilter, fourthFilter, fifthFilter,
+            sixthFilter, seventhFilter, eighthFilter, ninthFilter, tenthFilter;
+    JPanel sortingLabel, filterLabel;
     JComboBox sortBy, order, brandFilter, modelFilter, newFilter, authenticityFilter;;
     JTextField fromYear, toYear, fromPrice, toPrice;
     JCheckBox fromYearCheck, toYearCheck, fromPriceCheck, toPriceCheck;
-
     JTextField searchField;
-
     JPanel logoAndTimePanel, accountPanel;
-
     JLabel clock, setting;
     JButton account;
     ImageIcon accountIcon;
@@ -44,7 +44,7 @@ public class Frame extends JFrame {
             {
                 Component c = super.prepareRenderer(renderer, row, column);
                 JComponent jc = (JComponent)c;
-                jc.setBorder(new MatteBorder(0, 0, 40, 0, Color.decode("#92D050")));
+                jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#92D050")));
                 jc.setBackground(Color.decode("#385723"));
                 jc.setForeground(Color.WHITE);
                 jc.setFont(new Font("Verdana", Font.BOLD, 11));
@@ -71,7 +71,7 @@ public class Frame extends JFrame {
 
 
         for (int i = 0; i < partTable.getRowCount(); i ++)
-            partTable.setRowHeight(i, 80);
+            partTable.setRowHeight(i, 60);
 
         for (int i = 0; i < partTable.getColumnCount(); i ++)
             if(i != 6)
@@ -123,7 +123,7 @@ public class Frame extends JFrame {
         setLayout(new BorderLayout());
 
         marginPanelTable = new JPanel(new BorderLayout());
-        marginPanelTable.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        marginPanelTable.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         marginPanelTable.setBackground(Color.decode("#92D050"));
 
         marginPanelSearch = new JPanel(new BorderLayout());
@@ -172,89 +172,142 @@ public class Frame extends JFrame {
 
         clock = new JLabel();
         clock.setForeground(Color.WHITE);
-        clock.setFont(new Font("Arial", 1, 15));
+        clock.setFont(new Font("Verdana",  Font.BOLD, 15));
         Timer t = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clock.setText("<html><h2 style=\"color: white; padding:5px; border-style: solid; border-color: white\">" + new Date().toLocaleString().split(", ")[0]
+                clock.setText("<html><h2 style=\"color: white; padding:5px; \">" + new Date().toLocaleString().split(", ")[0]
                             + "<br>" + new Date().toLocaleString().split(", ")[1] + "</h2>");
             }
         });
         t.start();
-        clock.setBorder(new EmptyBorder(0, 0, 0, 10));
+        clock.setBorder(new EmptyBorder(0, 0, 0, 5));
 
-        ImageIcon logoIcon = new ImageIcon("resources/logo.png");
+        ImageIcon logoIconOriginal = new ImageIcon("resources/KSClogo.png");
+        Image image = logoIconOriginal.getImage();
+        Image newImg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+
+        ImageIcon logoIcon = new ImageIcon(newImg);
         JLabel logo = new JLabel(logoIcon);
         logo.setBorder(new EmptyBorder(0, 10, 0, 0));
         logoAndTimePanel.add(logo, BorderLayout.WEST);
-
         logoAndTimePanel.add(clock, BorderLayout.EAST);
 
+        // Filters and Stuff
         filterPanel = new JPanel();
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.Y_AXIS));
         filterPanel.setBackground(Color.GRAY);
         filterPanel.setPreferredSize(new Dimension(0,0));
-        sortBy = new JComboBox<>(new String[]{"Car Brand", "Car Model", "Name", "Year", "Quantity", "Price", "isNew", "Authenticity"});
-        order = new JComboBox<>(new String[]{"Asc", "Desc"});
-        filterPanel.add(new JLabel("Sort By:"));
-        filterPanel.add(sortBy);
-        filterPanel.add(order);
-        // brandFilter, modelFilter, fromYear, toYear, fromPrice, toPrice, newFilter, authenticityFilter;
 
-        brandFilter = new JComboBox(new String[]{"---"});
-        for (String brand: model.carBrands)
-            brandFilter.addItem(brand);
-        modelFilter = new JComboBox(new String[]{"---"});
+        // sortBy, order
+        sortingLabel = createLabel("Sorting");
+        filterPanel.add(sortingLabel);
+
+        // Sort By filter
+        firstFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        firstFilter.add(new JLabel("Sort By:"));
+        sortBy = new JComboBox<>(new String[]{"Car Brand", "Car Model", "Name", "Year", "Quantity", "Price", "isNew", "Authenticity"});
+        sortBy.setPreferredSize(new Dimension(120, 30));
+        sortBy.setBackground(Color.WHITE);
+        firstFilter.add(sortBy);
+        filterPanel.add(firstFilter);
+
+        // Order Filter
+        secondFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        secondFilter.add(new JLabel("Order:"));
+        order = new JComboBox<>(new String[]{"Ascending", "Descending"});
+        order.setPreferredSize(new Dimension(120, 30));
+        order.setBackground(Color.WHITE);
+        secondFilter.add(order);
+        filterPanel.add(secondFilter);
+
+        // brandFilter, modelFilter, fromYear, toYear, fromPrice, toPrice, newFilter, authenticityFilter;
+        filterLabel = createLabel("Filtering");
+        filterPanel.add(filterLabel);
+
+        // Brand Filter
+        thirdFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        thirdFilter.add(new JLabel("Car Brand:"));
+        brandFilter = new JComboBox(new String[]{"All"});
+        for (String carBrand: model.carBrands) {
+            brandFilter.addItem(carBrand);
+        }
+        brandFilter.setPreferredSize(new Dimension(120, 30));
+        brandFilter.setBackground(Color.WHITE);
+        thirdFilter.add(brandFilter);
+        filterPanel.add(thirdFilter);
+
+        // Model Filter
+        fourthFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        fourthFilter.add(new JLabel("Car Model:"));
+        modelFilter = new JComboBox(new String[]{"All"});
         Set<String> models = new HashSet<>();
         for (Part part: model.parts)
             models.add(part.carModel);
         for (String str: models)
             modelFilter.addItem(str);
+        modelFilter.setPreferredSize(new Dimension(120, 30));
+        modelFilter.setBackground(Color.WHITE);
+        fourthFilter.add(modelFilter);
+        filterPanel.add(fourthFilter);
 
-        fromYear = new JTextField(10);
-        fromYear.setEnabled(false);
-        fromYear.setBackground(Color.decode("#C6C6C6"));
-        toYear = new JTextField(10);
-        toYear.setEnabled(false);
-        toYear.setBackground(Color.decode("#C6C6C6"));
-        fromPrice = new JTextField(10);
-        fromPrice.setEnabled(false);
-        fromPrice.setBackground(Color.decode("#C6C6C6"));
-        toPrice = new JTextField(10);
-        toPrice.setEnabled(false);
-        toPrice.setBackground(Color.decode("#C6C6C6"));
+        // newFilter
+        ninthFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        ninthFilter.add(new JLabel("Condition"));
+        newFilter = new JComboBox<>(new String[]{"All", "NEW", "OLD"});
+        newFilter.setPreferredSize(new Dimension(120, 30));
+        newFilter.setBackground(Color.WHITE);
+        ninthFilter.add(newFilter);
+        filterPanel.add(ninthFilter);
 
-        fromYearCheck = new JCheckBox();
-        toYearCheck = new JCheckBox();
-        fromPriceCheck = new JCheckBox();
-        toPriceCheck = new JCheckBox();
+        // authenticityFilter
+        tenthFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        tenthFilter.add(new JLabel("Authenticity"));
+        authenticityFilter = new JComboBox<>(new String[]{"All", "ORIGINAL", "CLASS A", "OTHERS"});
+        authenticityFilter.setPreferredSize(new Dimension(120, 30));
+        authenticityFilter.setBackground(Color.WHITE);
+        tenthFilter.add(authenticityFilter);
+        filterPanel.add(tenthFilter);
 
-        newFilter = new JComboBox<>(new String[]{"---", "NEW", "OLD"});
-        authenticityFilter = new JComboBox<>(new String[]{"---", "ORIGINAL", "CLASS A", "OTHERS"});
+        // Year Range
+        filterLabel = createLabel("Year Range");
+        filterPanel.add(filterLabel);
 
-        filterPanel.add(new JLabel("Filter"));
-        filterPanel.add(new JLabel("Brand:"));
+        // From Year
+        fifthFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        fifthFilter.add(new JLabel("From:"));
+        fromYear = new JTextField();
+        fromYear.setPreferredSize(new Dimension(120, 30));
+        fifthFilter.add(fromYear);
+        filterPanel.add(fifthFilter);
 
-        filterPanel.add(new JLabel("Car Brand"));
-        filterPanel.add(brandFilter);
-        filterPanel.add(new JLabel("Car Model"));
-        filterPanel.add(modelFilter);
-        filterPanel.add(new JLabel("Year Range"));
-        filterPanel.add(fromYearCheck);
-        filterPanel.add(fromYear);
-        filterPanel.add(new JLabel("to"));
-        filterPanel.add(toYearCheck);
-        filterPanel.add(toYear);
-        filterPanel.add(new JLabel("Price Range"));
-        filterPanel.add(fromPriceCheck);
-        filterPanel.add(fromPrice);
-        filterPanel.add(new JLabel("to"));
-        filterPanel.add(toPriceCheck);
-        filterPanel.add(toPrice);
-        filterPanel.add(new JLabel("Condition"));
-        filterPanel.add(newFilter);
-        filterPanel.add(new JLabel("Authenticity"));
-        filterPanel.add(authenticityFilter);
+        // To Year
+        sixthFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        sixthFilter.add(new JLabel("To:"));
+        toYear = new JTextField();
+        toYear.setPreferredSize(new Dimension(120, 30));
+        sixthFilter.add(toYear);
+        filterPanel.add(sixthFilter);
+
+        // Price Range
+        filterLabel = createLabel("Price Range");
+        filterPanel.add(filterLabel);
+
+        // From Price
+        seventhFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        seventhFilter.add(new JLabel("From:"));
+        fromPrice = new JTextField();
+        fromPrice.setPreferredSize(new Dimension(120, 30));
+        seventhFilter.add(fromPrice);
+        filterPanel.add(seventhFilter);
+
+        // To Price
+        eighthFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        eighthFilter.add(new JLabel("To:"));
+        toPrice = new JTextField();
+        toPrice.setPreferredSize(new Dimension(120, 30));
+        eighthFilter.add(toPrice);
+        filterPanel.add(eighthFilter);
 
         accountPanel = new JPanel(new BorderLayout());
         accountPanel.setBackground(Color.DARK_GRAY);
@@ -276,6 +329,18 @@ public class Frame extends JFrame {
         leftPanel.add(logoAndTimePanel, BorderLayout.NORTH);
         leftPanel.add(accountPanel, BorderLayout.SOUTH);
         leftPanel.add(filterPanel, BorderLayout.CENTER);
+    }
+
+    public JPanel createLabel(String labelText) {
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        labelPanel.setBackground(Color.GRAY);
+        JLabel createLabel = new JLabel(labelText);
+        createLabel.setForeground(Color.WHITE);
+        createLabel.setFont(new Font("Verdana", Font.BOLD, 12));
+        createLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        labelPanel.add(createLabel);
+
+        return labelPanel;
     }
     protected void initializeRight()
     {

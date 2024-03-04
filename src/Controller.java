@@ -2,13 +2,11 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Controller {
     Main model;
@@ -20,230 +18,135 @@ public class Controller {
         this.model = this.view.model;
 
         this.view.searchField.getDocument().addDocumentListener(new DocumentListener(){
-
             @Override
-            public void insertUpdate(DocumentEvent e) {
-                filter();
-            }
-
+            public void insertUpdate(DocumentEvent e) {filter();}
             @Override
-            public void removeUpdate(DocumentEvent e) {
-                filter();
-            }
-
+            public void removeUpdate(DocumentEvent e) {filter();}
             @Override
-            public void changedUpdate(DocumentEvent e) {
-                filter();
-            }
-
-
+            public void changedUpdate(DocumentEvent e) {filter();}
         });
 
         this.view.sortBy.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                filter();
-            }
+            public void actionPerformed(ActionEvent e) {filter();}
         });
 
         this.view.order.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                filter();
-            }
+            public void actionPerformed(ActionEvent e) {filter();}
         });
 
         this.view.brandFilter.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                filter();
-            }
+            public void actionPerformed(ActionEvent e) {filter();}
         });
 
         this.view.modelFilter.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                filter();
-            }
+            public void actionPerformed(ActionEvent e) {filter();}
         });
 
-        this.view.fromYearCheck.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED)
-                {
-                    view.fromYear.setEnabled(true);
-                    view.fromYear.setBackground(Color.WHITE);
-                    if(!view.fromYear.getText().equals(""))
-                        try{
-                            int num = Integer.parseInt(view.fromYear.getText());
-                            if (num >= 9999)
-                                view.fromYear.setBackground(Color.decode("#FFCCCC"));
-                        }
-                        catch(Exception exception)
-                        {
+        this.view.fromYear.getDocument().addDocumentListener(new DocumentListener() {
+            private void update() {
+                if(!view.fromYear.getText().isEmpty()) {
+                    try {
+                        int num = Integer.parseInt(view.fromYear.getText());
+                        if (num >= 9999) {
                             view.fromYear.setBackground(Color.decode("#FFCCCC"));
+                        } else {
+                            view.fromYear.setBackground(Color.WHITE);
                         }
-                }
-                else
-                {
-                    view.fromYear.setEnabled(false);
-                    view.fromYear.setBackground(Color.decode("#C6C6C6"));
-                }
-                filter();
-            }
-        });
-
-        this.view.toYearCheck.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED)
-                {
-                    view.toYear.setEnabled(true);
-                    view.toYear.setBackground(Color.WHITE);
-                    if(!view.toYear.getText().equals(""))
-                        try{
-                            int num = Integer.parseInt(view.toYear.getText());
-                            if (num >= 9999)
-                                view.toYear.setBackground(Color.decode("#FFCCCC"));
-                        }
-                        catch(Exception exception)
-                        {
-                            view.toYear.setBackground(Color.decode("#FFCCCC"));
-                        }
-                }
-                else
-                {
-                    view.toYear.setEnabled(false);
-                    view.toYear.setBackground(Color.decode("#C6C6C6"));
-                }
-                filter();
-            }
-        });
-
-        this.view.fromPriceCheck.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED)
-                {
-                    view.fromPrice.setEnabled(true);
-                    view.fromPrice.setBackground(Color.WHITE);
-                    if(!view.fromPrice.getText().equals(""))
-                        try{
-                            Double.parseDouble(view.fromPrice.getText());
-                        }
-                        catch(Exception exception)
-                        {
-                            view.fromPrice.setBackground(Color.decode("#FFCCCC"));
-                        }
-                }
-                else
-                {
-                    view.fromPrice.setEnabled(false);
-                    view.fromPrice.setBackground(Color.decode("#C6C6C6"));
-                }
-                filter();
-            }
-        });
-
-        this.view.toPriceCheck.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED)
-                {
-                    view.toPrice.setEnabled(true);
-                    view.toPrice.setBackground(Color.WHITE);
-                    if(!view.toPrice.getText().equals(""))
-                        try
-                        {
-                            Double.parseDouble(view.toPrice.getText());
-                        }
-                        catch(Exception exception)
-                        {
-                            view.toPrice.setBackground(Color.decode("#FFCCCC"));
-                        }
-                }
-                else
-                {
-                    view.toPrice.setEnabled(false);
-                    view.toPrice.setBackground(Color.decode("#C6C6C6"));
-                }
-                filter();
-            }
-        });
-
-        this.view.fromYear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String input = view.fromYear.getText();
-                try
-                {
-                    int year = Integer.parseInt(input);
-                    if (year >= 9999)
+                    } catch(Exception exception) {
                         view.fromYear.setBackground(Color.decode("#FFCCCC"));
-                    else
-                    {
-                        view.fromYear.setBackground(Color.WHITE);
                     }
-                } catch (Exception exception)
-                {
-                    view.fromYear.setBackground(Color.decode("#FFCCCC"));
+                } else {
+                    view.fromYear.setBackground(Color.WHITE);
                 }
                 filter();
             }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { update(); }
         });
 
-        this.view.toYear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String input = view.toYear.getText();
-                try
-                {
-                    int year = Integer.parseInt(input);
-                    if (year >= 9999)
+        this.view.toYear.getDocument().addDocumentListener(new DocumentListener() {
+            private void update() {
+                if(!view.toYear.getText().isEmpty()) {
+                    try {
+                        int num = Integer.parseInt(view.toYear.getText());
+                        if (num >= 9999) {
+                            view.toYear.setBackground(Color.decode("#FFCCCC"));
+                        } else {
+                            view.toYear.setBackground(Color.WHITE);
+                        }
+                    } catch(Exception exception) {
                         view.toYear.setBackground(Color.decode("#FFCCCC"));
-                    else
-                    {
-                        view.toYear.setBackground(Color.WHITE);
                     }
-                } catch (Exception exception)
-                {
-                    view.toYear.setBackground(Color.decode("#FFCCCC"));
+                } else {
+                    view.toYear.setBackground(Color.WHITE);
                 }
                 filter();
             }
+            @Override
+            public void insertUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { update(); }
         });
 
-        this.view.fromPrice.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String input = view.fromPrice.getText();
-                try
-                {
-                    Double.parseDouble(input);
+        this.view.fromPrice.getDocument().addDocumentListener(new DocumentListener() {
+            private void update() {
+                if(!view.fromPrice.getText().isEmpty()) {
+                    String input = view.fromPrice.getText();
+                    try
+                    {
+                        Double.parseDouble(input);
+                        view.fromPrice.setBackground(Color.WHITE);
+                    } catch (Exception exception)
+                    {
+                        view.fromPrice.setBackground(Color.decode("#FFCCCC"));
+                    }
+                } else {
                     view.fromPrice.setBackground(Color.WHITE);
-                } catch (Exception exception)
-                {
-                    view.fromPrice.setBackground(Color.decode("#FFCCCC"));
                 }
                 filter();
             }
+            @Override
+            public void insertUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { update(); }
         });
 
-        this.view.toPrice.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String input = view.toPrice.getText();
-                try
-                {
-                    Double.parseDouble(input);
+        this.view.toPrice.getDocument().addDocumentListener(new DocumentListener() {
+            private void update() {
+                if(!view.toPrice.getText().isEmpty()) {
+                    String input = view.toPrice.getText();
+                    try
+                    {
+                        Double.parseDouble(input);
+                        view.toPrice.setBackground(Color.WHITE);
+                    } catch (Exception exception)
+                    {
+                        view.toPrice.setBackground(Color.decode("#FFCCCC"));
+                    }
+                } else {
                     view.toPrice.setBackground(Color.WHITE);
-                } catch (Exception exception)
-                {
-                    view.toPrice.setBackground(Color.decode("#FFCCCC"));
                 }
                 filter();
             }
+            @Override
+            public void insertUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { update(); }
         });
 
         this.view.newFilter.addActionListener(new ActionListener() {
@@ -320,29 +223,29 @@ public class Controller {
                 }
             }
 
-            Collections.sort(filtered, new Comparator<Part>() {
+            filtered.sort(new Comparator<Part>() {
                 @Override
                 public int compare(Part o1, Part o2) {
                     int order;
-                    if(view.order.getSelectedItem().toString().equals("Asc"))
+                    if (Objects.requireNonNull(view.order.getSelectedItem()).toString().equals("Ascending"))
                         order = 1;
                     else
                         order = -1;
-                    String sortBy = view.sortBy.getSelectedItem().toString();
+                    String sortBy = Objects.requireNonNull(view.sortBy.getSelectedItem()).toString();
                     if ("Car Brand".equals(sortBy)) {
                         return o1.carBrand.toLowerCase().compareTo(o2.carBrand.toLowerCase()) * order;
                     } else if ("Car Model".equals(sortBy)) {
                         return o1.carModel.toLowerCase().compareTo(o2.carModel.toLowerCase()) * order;
-                    } else if ("Name".equals(sortBy)){
+                    } else if ("Name".equals(sortBy)) {
                         return o1.name.toLowerCase().compareTo(o2.name.toLowerCase()) * order;
-                    } else if ("Year".equals(sortBy)){
-                        return Integer.valueOf(o1.year).compareTo(o2.year) * order;
-                    } else if ("Quantity".equals(sortBy)){
-                        return Integer.valueOf(o1.quantity).compareTo(o2.quantity) * order;
-                    } else if ("Price".equals(sortBy)){
-                        return Double.valueOf(o1.price).compareTo(o2.price) * order;
-                    } else if ("isNew".equals(sortBy)){
-                        return Boolean.valueOf(o1.isNew).compareTo(o2.isNew) * order;
+                    } else if ("Year".equals(sortBy)) {
+                        return Integer.compare(o1.year, o2.year) * order;
+                    } else if ("Quantity".equals(sortBy)) {
+                        return Integer.compare(o1.quantity, o2.quantity) * order;
+                    } else if ("Price".equals(sortBy)) {
+                        return Double.compare(o1.price, o2.price) * order;
+                    } else if ("isNew".equals(sortBy)) {
+                        return Boolean.compare(o1.isNew, o2.isNew) * order;
                     } else {
                         String a = o1.authenticity;
                         String b = o2.authenticity;
@@ -376,8 +279,8 @@ public class Controller {
                 }
             });
 
-            String brand = this.view.brandFilter.getSelectedItem().toString();
-            if(!brand.equals("---"))
+            String brand = Objects.requireNonNull(this.view.brandFilter.getSelectedItem()).toString();
+            if(!brand.equals("All"))
             {
                 ArrayList<Part> filter = new ArrayList<>();
                 for (Part part: filtered)
@@ -388,8 +291,8 @@ public class Controller {
                 filtered = filter;
             }
 
-            String carModel = this.view.modelFilter.getSelectedItem().toString();
-            if(!carModel.equals("---"))
+            String carModel = Objects.requireNonNull(this.view.modelFilter.getSelectedItem()).toString();
+            if(!carModel.equals("All"))
             {
                 ArrayList<Part> filterOut = new ArrayList<>();
                 for (Part part: filtered)
@@ -400,7 +303,7 @@ public class Controller {
                 filtered.removeAll(filterOut);
             }
 
-            if (this.view.fromYearCheck.isSelected() && (!this.view.fromYear.getText().equals("")) && this.view.fromYear.getBackground().equals(Color.WHITE))
+            if ((!this.view.fromYear.getText().isEmpty()) && this.view.fromYear.getBackground().equals(Color.WHITE))
             {
                 int year = Integer.parseInt(this.view.fromYear.getText());
                 ArrayList<Part> filterOut = new ArrayList<>();
@@ -411,7 +314,7 @@ public class Controller {
                 }
                 filtered.removeAll(filterOut);
             }
-            if (this.view.toYearCheck.isSelected() && (!this.view.toYear.getText().equals("")) && this.view.toYear.getBackground().equals(Color.WHITE))
+            if ((!this.view.toYear.getText().isEmpty()) && this.view.toYear.getBackground().equals(Color.WHITE))
             {
                 int year = Integer.parseInt(this.view.toYear.getText());
                 ArrayList<Part> filterOut = new ArrayList();
@@ -423,7 +326,7 @@ public class Controller {
                 filtered.removeAll(filterOut);
             }
 
-            if (this.view.fromPriceCheck.isSelected() && (!this.view.fromPrice.getText().equals("")) && this.view.fromPrice.getBackground().equals(Color.WHITE))
+            if ((!this.view.fromPrice.getText().isEmpty()) && this.view.fromPrice.getBackground().equals(Color.WHITE))
             {
                     double price = Double.parseDouble(this.view.fromPrice.getText());
                     ArrayList<Part> filterOut = new ArrayList();
@@ -435,7 +338,7 @@ public class Controller {
                     filtered.removeAll(filterOut);
             }
 
-            if (this.view.toPriceCheck.isSelected() && (!this.view.toPrice.getText().equals("")) && this.view.toPrice.getBackground().equals(Color.WHITE))
+            if ((!this.view.toPrice.getText().isEmpty()) && this.view.toPrice.getBackground().equals(Color.WHITE))
             {
                 double price = Double.parseDouble(this.view.toPrice.getText());
                 ArrayList<Part> filterOut = new ArrayList();
@@ -448,7 +351,7 @@ public class Controller {
             }
 
             String condition = this.view.newFilter.getSelectedItem().toString();
-            if(!condition.equals("---"))
+            if(!condition.equals("All"))
             {
                 ArrayList<Part> filterOut = new ArrayList<>();
                 for (Part part: filtered)
@@ -466,7 +369,7 @@ public class Controller {
             }
 
             String authenticity = this.view.authenticityFilter.getSelectedItem().toString();
-            if(!authenticity.equals("---"))
+            if(!authenticity.equals("All"))
             {
                 ArrayList<Part> filterOut = new ArrayList<>();
                 for (Part part: filtered)

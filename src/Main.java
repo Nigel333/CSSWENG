@@ -10,8 +10,8 @@ import javax.swing.table.AbstractTableModel;
 
 public class Main{
     ArrayList<Part> parts = new ArrayList<>();
-    PartTableModel tableModel;
     ArrayList<String> carBrands;
+    PartTableModel tableModel;
     boolean isManager = false;
 
     public static void main(String[] args) throws IOException {
