@@ -361,7 +361,6 @@ public class Frame extends JFrame {
         checkout = new StepButton("Checkout");
         checkout.setPreferredSize(new Dimension(93,50));
         checkout.setFont(new Font("Verdana", Font.BOLD, 11));
-        checkout.setEnabled(true);
         payment = new StepButton("Payment");
         payment.setPreferredSize(new Dimension(93,50));
         payment.setFont(new Font("Verdana", Font.BOLD, 11));
@@ -397,6 +396,11 @@ public class Frame extends JFrame {
         JScrollPane cartViewScroll = new JScrollPane(cartView, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         cartViewScroll.getVerticalScrollBar().setUnitIncrement(16);
         cartPanel.add(cartViewScroll, BorderLayout.CENTER);
+        JButton proceedButton = new JButton("Proceed to Checkout");
+        proceedButton.setPreferredSize(new Dimension(50,40));
+        proceedButton.setFont(new Font("Verdana", Font.BOLD, 16));
+        proceedButton.setFocusPainted(false);
+        cartPanel.add(proceedButton, BorderLayout.SOUTH);
 
         checkoutPanel = new JPanel();
         checkoutPanel.add(new JLabel("This is the CHECKOUT. ヾ(≧▽≦*)o"));
