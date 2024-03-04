@@ -292,11 +292,11 @@ public class Frame extends JFrame {
         cart = new StepButton("Cart");
         cart.setPreferredSize(new Dimension(77,50));
         cart.setFont(new Font("Verdana", Font.BOLD, 11));
-        //cart.setEnabled(true);
+        cart.setEnabled(true);
         checkout = new StepButton("Checkout");
         checkout.setPreferredSize(new Dimension(93,50));
         checkout.setFont(new Font("Verdana", Font.BOLD, 11));
-
+        checkout.setEnabled(true);
         payment = new StepButton("Payment");
         payment.setPreferredSize(new Dimension(93,50));
         payment.setFont(new Font("Verdana", Font.BOLD, 11));
@@ -372,7 +372,7 @@ class StepButton extends JButton {
         this.setBackground(Color.decode("#0080FF"));
         this.setForeground(Color.WHITE);
         this.setPreferredSize(new Dimension(100, 50));
-        this.setEnabled(true);
+        this.setEnabled(false);
         this.setFocusPainted(false);
     }
 

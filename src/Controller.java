@@ -324,6 +324,10 @@ public class Controller {
                 view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                 view.rightDisplay.repaint();
                 view.rightDisplay.revalidate();
+
+                view.checkout.setEnabled(true);
+                view.payment.setEnabled(false);
+                view.receipt.setEnabled(false);
             }
         });
         view.checkout.addActionListener(new ActionListener() {
@@ -333,6 +337,10 @@ public class Controller {
                 view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                 view.rightDisplay.repaint();
                 view.rightDisplay.revalidate();
+
+                view.cart.setEnabled(true);
+                view.payment.setEnabled(true);
+                view.receipt.setEnabled(false);
             }
         });
         view.payment.addActionListener(new ActionListener() {
@@ -342,6 +350,10 @@ public class Controller {
                 view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                 view.rightDisplay.repaint();
                 view.rightDisplay.revalidate();
+
+                view.cart.setEnabled(false);
+                view.checkout.setEnabled(true);
+                view.receipt.setEnabled(true);
             }
         });
         view.receipt.addActionListener(new ActionListener() {
@@ -351,6 +363,10 @@ public class Controller {
                 view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                 view.rightDisplay.repaint();
                 view.rightDisplay.revalidate();
+
+                view.cart.setEnabled(false);
+                view.checkout.setEnabled(false);
+                view.payment.setEnabled(false);
             }
         });
     }
