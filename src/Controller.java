@@ -2,10 +2,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +15,14 @@ public class Controller {
     {
         this.view = view;
         this.model = this.view.model;
+
+        view.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                model.overwriteFile();
+            }
+        });
 
         this.view.searchField.getDocument().addDocumentListener(new DocumentListener(){
 
@@ -35,8 +40,6 @@ public class Controller {
             public void changedUpdate(DocumentEvent e) {
                 filter();
             }
-
-
         });
 
         this.view.sortBy.addActionListener(new ActionListener() {
