@@ -1,7 +1,9 @@
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
-
+import org.apache.poi.poifs.crypt.EncryptionInfo;
+import org.apache.poi.poifs.crypt.EncryptionMode;
+import org.apache.poi.poifs.crypt.Encryptor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -15,6 +17,56 @@ public class Main{
     boolean isManager = false;
     int currCart = 1;
     ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
+
+    public void overwriteFile()
+    {
+        Workbook workbook = new XSSFWorkbook();
+        for (String brand: carBrands)
+        {
+            Sheet sheet = workbook.createSheet();
+            workbook.setSheetName(workbook.getSheetIndex(sheet), brand);
+            ArrayList<Part> partsOfBrand = new ArrayList<Part>();
+            for (Part part: parts)
+                if (part.carBrand.equals(brand))
+                    partsOfBrand.add(part);
+
+            int rowNum = 0;
+            for(Part part: partsOfBrand)
+            {
+                Row row = sheet.createRow(rowNum);
+                row.createCell(0).setCellValue(part.carModel);
+                row.createCell(1).setCellValue(part.name);
+                row.createCell(2).setCellValue(part.year);
+                row.createCell(3).setCellValue(part.quantity);
+                row.createCell(4).setCellValue(part.price);
+                if (part.isNew)
+                    row.createCell(5).setCellValue("YES");
+                else
+                    row.createCell(5).setCellValue("NO");
+                row.createCell(6).setCellValue(part.authenticity);
+                rowNum++;
+            }
+        }
+
+        try
+        {
+            POIFSFileSystem fs = new POIFSFileSystem();
+            EncryptionInfo info = new EncryptionInfo(EncryptionMode.agile);
+            Encryptor enc = info.getEncryptor();
+            enc.confirmPassword("password");
+            OutputStream os = enc.getDataStream(fs);
+            workbook.write(os);
+            os.close();
+            FileOutputStream fos = new FileOutputStream("database.xlsx");
+            fs.writeFilesystem(fos);
+            fos.close();
+            workbook.close();
+        }
+        catch (Exception e)
+        {
+            System.err.println(e);
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         Main model = new Main();
@@ -62,6 +114,7 @@ public class Main{
 
         Frame view = new Frame(model);
         Controller controller = new Controller(view);
+        model.overwriteFile();
     }
 }
 class PartTableModel extends AbstractTableModel {

@@ -17,6 +17,14 @@ public class Controller {
         this.view = view;
         this.model = this.view.model;
 
+        view.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                model.overwriteFile();
+            }
+        });
+
         this.view.searchField.getDocument().addDocumentListener(new DocumentListener(){
             @Override
             public void insertUpdate(DocumentEvent e) {filter();}
