@@ -30,9 +30,11 @@ public class Frame extends JFrame {
     JButton account;
     ImageIcon accountIcon;
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
-    JPanel cartPanel, checkoutPanel, paymentPanel, receiptPanel;
+    JPanel cartPanel, checkoutPanel, paymentPanel, receiptPanel, cancelBackPanel;
     JPanel cartView;
     StepButton cart, checkout, payment, receipt;
+
+    CartButton proceedButton, proceed2PayButton, payButton, cancelButton, backButton;
     ArrayList<CartButton> cartButtons = new ArrayList<>();
 
     public Frame(Main model) {
@@ -396,20 +398,39 @@ public class Frame extends JFrame {
         JScrollPane cartViewScroll = new JScrollPane(cartView, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         cartViewScroll.getVerticalScrollBar().setUnitIncrement(16);
         cartPanel.add(cartViewScroll, BorderLayout.CENTER);
-        JButton proceedButton = new JButton("Proceed to Checkout");
-        proceedButton.setPreferredSize(new Dimension(50,40));
-        proceedButton.setFont(new Font("Verdana", Font.BOLD, 16));
-        proceedButton.setFocusPainted(false);
+        proceedButton = new CartButton("Proceed to Checkout");
+        cancelButton = new CartButton();
+        java.net.URL imageURL = getClass().getClassLoader().getResource("images/cancel_button.png");
+        if (imageURL != null) {
+            ImageIcon originalIcon = new ImageIcon(imageURL);
+            Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+            cancelButton.setIcon(new ImageIcon(scaledImage));
+        } else {
+            //System.err.println("Error: Unable to load cancel button icon");
+            cancelButton.setText("Cancel");
+            cancelButton.setFont(new Font("Verdana", Font.BOLD, 11));
+        }
+        cancelBackPanel = new JPanel(new GridLayout(1,5));
+        cancelBackPanel.add(cancelButton);
+        cancelBackPanel.add(new JPanel());
+        cancelBackPanel.add(new JPanel());
+        cancelBackPanel.add(new JPanel());
+        cancelBackPanel.add(new JPanel());
+        cartPanel.add(cancelBackPanel, BorderLayout.NORTH);
         cartPanel.add(proceedButton, BorderLayout.SOUTH);
 
         checkoutPanel = new JPanel();
-        checkoutPanel.add(new JLabel("This is the CHECKOUT. ヾ(≧▽≦*)o"));
+        checkoutPanel.add(new JLabel("This is the CHECKOUT. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
+        proceed2PayButton = new CartButton("Proceed to Payment");
+        checkoutPanel.add(proceed2PayButton, BorderLayout.SOUTH);
 
         paymentPanel = new JPanel();
-        paymentPanel.add(new JLabel("This is the PAYMENT. ヾ(≧▽≦*)o"));
+        paymentPanel.add(new JLabel("This is the PAYMENT. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
+        payButton = new CartButton("Pay");
+        paymentPanel.add(payButton, BorderLayout.SOUTH);
 
         receiptPanel = new JPanel();
-        receiptPanel.add(new JLabel("This is the RECEIPT. ヾ(≧▽≦*)o"));
+        receiptPanel.add(new JLabel("This is the RECEIPT. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
 
         displayScreen = cartPanel;
         rightDisplay.add(displayScreen, BorderLayout.CENTER);
@@ -471,6 +492,19 @@ class CartButton extends JButton {
         this.num = num;
     }
 
+    public CartButton(String text)
+    {
+        this.setText(text);
+        this.setPreferredSize(new Dimension(50,40));
+        this.setFont(new Font("Verdana", Font.BOLD, 16));
+        this.setFocusPainted(false);
+    }
+
+    public CartButton()
+    {
+        this.setPreferredSize(new Dimension(30,30));
+        this.setFocusPainted(false);
+    }
     @Override
     public void setEnabled(boolean b)
     {

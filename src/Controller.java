@@ -256,6 +256,61 @@ public class Controller {
                 view.payment.setEnabled(false);
             }
         });
+        view.proceedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.rightDisplay.remove(view.displayScreen);
+                view.displayScreen = view.checkoutPanel;
+                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                view.rightDisplay.repaint();
+                view.rightDisplay.revalidate();
+
+                view.cart.setEnabled(false);
+                view.checkout.setEnabled(true);
+                view.payment.setEnabled(false);
+                view.receipt.setEnabled(false);
+            }
+        });
+        view.proceed2PayButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.rightDisplay.remove(view.displayScreen);
+                view.displayScreen = view.paymentPanel;
+                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                view.rightDisplay.repaint();
+                view.rightDisplay.revalidate();
+
+                view.cart.setEnabled(false);
+                view.checkout.setEnabled(false);
+                view.payment.setEnabled(true);
+                view.receipt.setEnabled(false);
+            }
+        });
+        view.payButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.rightDisplay.remove(view.displayScreen);
+                view.displayScreen = view.paymentPanel;
+                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                view.rightDisplay.repaint();
+                view.rightDisplay.revalidate();
+
+                view.cart.setEnabled(false);
+                view.checkout.setEnabled(false);
+                view.payment.setEnabled(true);
+                view.receipt.setEnabled(false);
+            }
+        });
+        view.cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.shoppingCarts.get(model.currCart).parts.clear();
+                view.cartView.removeAll();
+                view.cartView.revalidate();
+                view.cartView.repaint();
+                System.out.println("testing");
+            }
+        });
     }
     public void filter() {
         try {
