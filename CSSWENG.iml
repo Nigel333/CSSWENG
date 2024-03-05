@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="apache.poi" level="project" />
     <orderEntry type="library" name="apache.poi.excelant" level="project" />
+    <orderEntry type="library" name="evolvedbinary.thirdparty.apache.httpd.mime.types" level="project" />
   </component>
 </module>

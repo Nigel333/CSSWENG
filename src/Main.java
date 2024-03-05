@@ -12,8 +12,8 @@ import javax.swing.table.AbstractTableModel;
 
 public class Main{
     ArrayList<Part> parts = new ArrayList<>();
-    PartTableModel tableModel;
     ArrayList<String> carBrands;
+    PartTableModel tableModel;
     boolean isManager = false;
     int currCart = 1;
     ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
