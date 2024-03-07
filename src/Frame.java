@@ -22,7 +22,6 @@ public class Frame extends JFrame {
     JPanel sortingLabel, filterLabel;
     JComboBox sortBy, order, brandFilter, modelFilter, newFilter, authenticityFilter;;
     JTextField fromYear, toYear, fromPrice, toPrice;
-    JCheckBox fromYearCheck, toYearCheck, fromPriceCheck, toPriceCheck;
     JTextField searchField;
     JPanel logoAndTimePanel, accountPanel;
     JLabel clock, setting;
@@ -30,7 +29,8 @@ public class Frame extends JFrame {
     ImageIcon accountIcon;
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
     JPanel cartPanel, checkoutPanel, paymentPanel, receiptPanel, cancelBackPanel;
-    JPanel cartView;
+    ArrayList<JPanel> cartViews = new ArrayList<>();
+    JScrollPane cartViewScroll;
     StepButton cart, checkout, payment, receipt;
 
     CartButton proceedButton, proceed2PayButton, payButton, cancelButton, backButton;
@@ -111,7 +111,7 @@ public class Frame extends JFrame {
                             JOptionPane.showMessageDialog(dialog, "Added to Cart!");
                             Part part = new Part((String) partTable.getValueAt(row,0), (String) partTable.getValueAt(row,1), (String) partTable.getValueAt(row,2), (Integer) partTable.getValueAt(row,3), 0, (Double) partTable.getValueAt(row,5), (Boolean) partTable.getValueAt(row,6), (String) partTable.getValueAt(row,7));
                             model.shoppingCarts.get(model.currCart).parts.add(part);
-                            addToCart(part);
+                            addToCart(model.currCart, part);
                             dialog.dispose();
                         }
                     });
@@ -392,9 +392,12 @@ public class Frame extends JFrame {
         cartPanel = new JPanel(new BorderLayout());
         cartPanel.add(new JLabel("This is the CART. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
 
-        cartView = new JPanel();
-        cartView.setLayout(new BoxLayout(cartView, BoxLayout.Y_AXIS));
-        JScrollPane cartViewScroll = new JScrollPane(cartView, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        for(int i = 0; i < 5; i++)
+        {
+            cartViews.add(new JPanel());
+            cartViews.get(i).setLayout(new BoxLayout(cartViews.get(i), BoxLayout.Y_AXIS));
+        }
+        cartViewScroll = new JScrollPane(cartViews.get(model.currCart - 1), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         cartViewScroll.getVerticalScrollBar().setUnitIncrement(16);
         cartPanel.add(cartViewScroll, BorderLayout.CENTER);
         proceedButton = new CartButton("Proceed to Checkout");
@@ -438,7 +441,7 @@ public class Frame extends JFrame {
         rightPanel.add(cartsList, BorderLayout.WEST);
         rightPanel.add(rightDisplay, BorderLayout.CENTER);
     }
-    public void addToCart(Part part)
+    public void addToCart(int i, Part part)
     {
         JLabel label = new JLabel();
         label.setText("<html>\n" +
@@ -449,9 +452,9 @@ public class Frame extends JFrame {
                 "        <p>" + part.price + " | QTY: " + part.quantity + "</p>\n" +
                 "    </body>\n" +
                 "</html>");
-        cartView.add(label);
-        cartView.repaint();
-        cartView.revalidate();
+        cartViews.get(i - 1).add(label);
+        cartViews.get(i - 1).repaint();
+        cartViews.get(i -1).revalidate();
     }
 }
 class StepButton extends JButton {
