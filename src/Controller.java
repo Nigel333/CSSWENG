@@ -341,6 +341,7 @@ public class Controller {
                 view.receiptView.revalidate();
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
+                view.cartView.removeAll();
                 view.cancelBackPanel.removeAll();
                 java.net.URL imageURL = getClass().getClassLoader().getResource("images/cancel_button.png");
                 if (imageURL != null) {
