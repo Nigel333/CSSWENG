@@ -215,7 +215,11 @@ public class Controller {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     view.cartButtons.get(model.currCart - 1).setEnabled(true);
+                    view.cartPanel.remove(view.cartViewScroll);
                     model.currCart = cartButton.num;
+                    view.cartViewScroll = new JScrollPane(view.cartViews.get(model.currCart - 1), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    view.cartViewScroll.getVerticalScrollBar().setUnitIncrement(16);
+                    view.cartPanel.add(view.cartViewScroll, BorderLayout.CENTER);
                     cartButton.setEnabled(false);
 
                     view.rightDisplay.remove(view.displayScreen);
@@ -375,9 +379,9 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.shoppingCarts.get(model.currCart).parts.clear();
-                view.cartView.removeAll();
-                view.cartView.revalidate();
-                view.cartView.repaint();
+                view.cartViews.get(model.currCart).removeAll();
+                view.cartViews.get(model.currCart).revalidate();
+                view.cartViews.get(model.currCart).repaint();
                 //System.out.println("testing");
             }
         });
