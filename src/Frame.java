@@ -29,11 +29,15 @@ public class Frame extends JFrame {
     ImageIcon accountIcon;
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
     JPanel cartPanel, checkoutPanel, paymentPanel, receiptPanel, cancelBackPanel;
+<<<<<<< Updated upstream
     ArrayList<JPanel> cartViews = new ArrayList<>();
     JScrollPane cartViewScroll;
+=======
+    JPanel cartView, checkoutView, paymentView, receiptView;
+>>>>>>> Stashed changes
     StepButton cart, checkout, payment, receipt;
 
-    CartButton proceedButton, proceed2PayButton, payButton, cancelButton, backButton;
+    CartButton proceedButton, proceed2PayButton, payButton, printButton, cancelOrderButton, backButtonChk, backButtonPay;
     ArrayList<CartButton> cartButtons = new ArrayList<>();
 
     public Frame(Main model) {
@@ -390,7 +394,6 @@ public class Frame extends JFrame {
         rightDisplay = new JPanel(new BorderLayout());
 
         cartPanel = new JPanel(new BorderLayout());
-        cartPanel.add(new JLabel("This is the CART. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
 
         for(int i = 0; i < 5; i++)
         {
@@ -401,19 +404,19 @@ public class Frame extends JFrame {
         cartViewScroll.getVerticalScrollBar().setUnitIncrement(16);
         cartPanel.add(cartViewScroll, BorderLayout.CENTER);
         proceedButton = new CartButton("Proceed to Checkout");
-        cancelButton = new CartButton();
+        cancelOrderButton = new CartButton();
         java.net.URL imageURL = getClass().getClassLoader().getResource("images/cancel_button.png");
         if (imageURL != null) {
             ImageIcon originalIcon = new ImageIcon(imageURL);
             Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-            cancelButton.setIcon(new ImageIcon(scaledImage));
+            cancelOrderButton.setIcon(new ImageIcon(scaledImage));
         } else {
             //System.err.println("Error: Unable to load cancel button icon");
-            cancelButton.setText("Cancel");
-            cancelButton.setFont(new Font("Verdana", Font.BOLD, 11));
+            cancelOrderButton.setText("Cancel");
+            cancelOrderButton.setFont(new Font("Verdana", Font.BOLD, 11));
         }
         cancelBackPanel = new JPanel(new GridLayout(1,5));
-        cancelBackPanel.add(cancelButton);
+        cancelBackPanel.add(cancelOrderButton);
         cancelBackPanel.add(new JPanel());
         cancelBackPanel.add(new JPanel());
         cancelBackPanel.add(new JPanel());
@@ -421,18 +424,34 @@ public class Frame extends JFrame {
         cartPanel.add(cancelBackPanel, BorderLayout.NORTH);
         cartPanel.add(proceedButton, BorderLayout.SOUTH);
 
-        checkoutPanel = new JPanel();
-        checkoutPanel.add(new JLabel("This is the CHECKOUT. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
+        checkoutPanel = new JPanel(new BorderLayout());
+        checkoutView = new JPanel();
+        checkoutView.setLayout(new BoxLayout(checkoutView, BoxLayout.Y_AXIS));
+        JScrollPane checkoutViewScroll = new JScrollPane(checkoutView, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        checkoutViewScroll.getVerticalScrollBar().setUnitIncrement(16);
+        checkoutPanel.add(checkoutViewScroll, BorderLayout.CENTER);
         proceed2PayButton = new CartButton("Proceed to Payment");
         checkoutPanel.add(proceed2PayButton, BorderLayout.SOUTH);
+        backButtonChk = new CartButton();
 
-        paymentPanel = new JPanel();
-        paymentPanel.add(new JLabel("This is the PAYMENT. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
+        paymentPanel = new JPanel(new BorderLayout());
+        paymentView = new JPanel();
+        paymentView.setLayout(new BoxLayout(paymentView, BoxLayout.Y_AXIS));
+        JScrollPane paymentViewScroll = new JScrollPane(paymentView, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paymentViewScroll.getVerticalScrollBar().setUnitIncrement(16);
+        paymentPanel.add(paymentViewScroll, BorderLayout.CENTER);
         payButton = new CartButton("Pay");
         paymentPanel.add(payButton, BorderLayout.SOUTH);
+        backButtonPay = new CartButton();
 
-        receiptPanel = new JPanel();
-        receiptPanel.add(new JLabel("This is the RECEIPT. ヾ(≧▽≦*)o"), BorderLayout.NORTH);
+        receiptPanel = new JPanel(new BorderLayout());
+        receiptView = new JPanel();
+        receiptView.setLayout(new BoxLayout(receiptView, BoxLayout.Y_AXIS));
+        JScrollPane receiptViewScroll = new JScrollPane(receiptView, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        receiptViewScroll.getVerticalScrollBar().setUnitIncrement(16);
+        receiptPanel.add(receiptViewScroll, BorderLayout.CENTER);
+        printButton = new CartButton("Print Receipt");
+        receiptPanel.add(printButton, BorderLayout.SOUTH);
 
         displayScreen = cartPanel;
         rightDisplay.add(displayScreen, BorderLayout.CENTER);
@@ -455,6 +474,50 @@ public class Frame extends JFrame {
         cartViews.get(i - 1).add(label);
         cartViews.get(i - 1).repaint();
         cartViews.get(i -1).revalidate();
+    }
+    public void checkoutList(Part part)
+    {
+        JLabel label = new JLabel();
+        label.setText("<html>\n" +
+                "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
+                "        <p>"+ part.carBrand + "</p>\n" +
+                "        <p>" + part.carModel + " | " + part.name  + "(" + part.year + ")</p>\n" +
+                "        <p>" + part.authenticity + " | " + part.isNew + "</p>\n" +
+                "        <p>" + part.price + " | QTY: " + part.quantity + "</p>\n" +
+                "    </body>\n" +
+                "</html>");
+        checkoutView.add(label);
+        checkoutView.repaint();
+        checkoutView.revalidate();
+    }
+    public void paymentList(Part part)
+    {
+        JLabel label = new JLabel();
+        label.setText("<html>\n" +
+                "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
+                "        <p>"+ part.carBrand + "</p>" +
+                "        <p>" + part.carModel + "</p>" +
+                "        <p>" + part.name  + " (" + part.year + ")" + "  |  QTY: " + part.quantity + "  |  P" + part.price + " | " + "</p></p>\n" +
+                "    </body>\n" +
+                "</html>");
+        paymentView.add(label);
+        paymentView.repaint();
+        paymentView.revalidate();
+    }
+
+    public void receiptList(Part part)
+    {
+        JLabel label = new JLabel();
+        label.setText("<html>\n" +
+                "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
+                "        <p>"+ part.carBrand + "</p>" +
+                "        <p>" + part.carModel + "</p>" +
+                "        <p>" + part.name  + " (" + part.year + ")" + "  |  QTY: " + part.quantity + "  |  P" + part.price + " | " + "</p></p>\n" +
+                "    </body>\n" +
+                "</html>");
+        receiptView.add(label);
+        receiptView.repaint();
+        receiptView.revalidate();
     }
 }
 class StepButton extends JButton {
