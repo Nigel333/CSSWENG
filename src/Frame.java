@@ -486,15 +486,21 @@ public class Frame extends JFrame {
     }
     public void paymentList(Part part)
     {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
         JLabel label = new JLabel();
         label.setText("<html>\n" +
                 "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
                 "        <p>"+ part.carBrand + "</p>" +
                 "        <p>" + part.carModel + "</p>" +
-                "        <p>" + part.name  + " (" + part.year + ")" + "  |  QTY: " + part.quantity + "  |  P" + part.price + " | " + "</p></p>\n" +
+                "        <p>"+ part.name  + " (" + part.year + ")" + "</p>" +
+                "        <p>" + "QTY: " + part.quantity + "  |  P" + part.price + " | " + "</p></p>\n" +
                 "    </body>\n" +
                 "</html>");
-        paymentView.add(label);
+        panel.add(label);
+        JTextField textField = new JTextField(5);
+        panel.add(textField);
+        paymentView.add(panel);
         paymentView.repaint();
         paymentView.revalidate();
     }
