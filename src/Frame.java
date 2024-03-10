@@ -25,19 +25,20 @@ public class Frame extends JFrame {
 
     JTextField searchField;
     JPanel logoAndTimePanel, accountPanel;
-    JLabel clock, setting;
+    JLabel clock, setting, totalPrice;
     JButton account;
     ImageIcon accountIcon;
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
-    JPanel cartPanel, checkoutPanel, paymentPanel, receiptPanel, cancelBackPanel;
+    JPanel cartPanel, checkoutPanel, paymentPanel, paymentBtnsPanel, receiptPanel, cancelBackPanel;
     ArrayList<JPanel> cartViews = new ArrayList<>();
     JPanel checkoutView, paymentView, receiptView;
     JScrollPane cartViewScroll;
     StepButton cart, checkout, payment, receipt;
 
-    CartButton proceedButton, proceed2PayButton, payButton, printButton, cancelOrderButton, backButtonChk, backButtonPay;
+    CartButton proceedButton, proceed2PayButton, calculateButton, payButton, printButton, cancelOrderButton, backButtonChk, backButtonPay;
     ArrayList<CartButton> cartButtons = new ArrayList<>();
-
+    ArrayList<Double> partPrices = new ArrayList<>();
+    Double sum = 0.0;
     public Frame(Main model) {
         super("Item Database");
         this.model = model;
@@ -433,6 +434,7 @@ public class Frame extends JFrame {
         checkoutPanel.add(proceed2PayButton, BorderLayout.SOUTH);
         backButtonChk = new CartButton();
 
+
         paymentPanel = new JPanel(new BorderLayout());
         paymentView = new JPanel();
         paymentView.setLayout(new BoxLayout(paymentView, BoxLayout.Y_AXIS));
@@ -440,7 +442,15 @@ public class Frame extends JFrame {
         paymentViewScroll.getVerticalScrollBar().setUnitIncrement(16);
         paymentPanel.add(paymentViewScroll, BorderLayout.CENTER);
         payButton = new CartButton("Pay");
-        paymentPanel.add(payButton, BorderLayout.SOUTH);
+        /* FOR SPRINT 3
+        calculateButton = new CartButton("Calculate");
+         */
+        paymentBtnsPanel = new JPanel(new BorderLayout());
+
+        totalPrice = new JLabel();
+        paymentBtnsPanel.add(totalPrice, BorderLayout.NORTH);
+        paymentBtnsPanel.add(payButton,BorderLayout.CENTER);
+        paymentPanel.add(paymentBtnsPanel, BorderLayout.SOUTH);
         backButtonPay = new CartButton();
 
         receiptPanel = new JPanel(new BorderLayout());
@@ -467,7 +477,7 @@ public class Frame extends JFrame {
                 "        <p>"+ part.carBrand + "</p>\n" +
                 "        <p>" + part.carModel + " | " + part.name  + "(" + part.year + ")</p>\n" +
                 "        <p>" + part.authenticity + " | " + part.isNew + "</p>\n" +
-                "        <p>" + part.price + " | QTY: " + part.quantity + "</p>\n" +
+                "        <p>" + "P" + part.price + " | QTY: " + part.quantity + "</p>\n" +
                 "    </body>\n" +
                 "</html>");
         cartViews.get(i - 1).add(label);
@@ -482,7 +492,7 @@ public class Frame extends JFrame {
                 "        <p>"+ part.carBrand + "</p>\n" +
                 "        <p>" + part.carModel + " | " + part.name  + "(" + part.year + ")</p>\n" +
                 "        <p>" + part.authenticity + " | " + part.isNew + "</p>\n" +
-                "        <p>" + part.price + " | QTY: " + part.quantity + "</p>\n" +
+                "        <p>" + "P" + part.price + " | QTY: " + part.quantity + "</p>\n" +
                 "    </body>\n" +
                 "</html>");
         checkoutView.add(label);
@@ -491,9 +501,12 @@ public class Frame extends JFrame {
     }
     public void paymentList(Part part)
     {
+        /* FOR SPRINT 3
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
+        */
         JLabel label = new JLabel();
+
         label.setText("<html>\n" +
                 "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
                 "        <p>"+ part.carBrand + "</p>" +
@@ -502,10 +515,14 @@ public class Frame extends JFrame {
                 "        <p>" + "QTY: " + part.quantity + "  |  P" + part.price + " | " + "</p></p>\n" +
                 "    </body>\n" +
                 "</html>");
+        /* FOR SPRINT 3
         panel.add(label);
         JTextField textField = new JTextField(5);
         panel.add(textField);
-        paymentView.add(panel);
+         */
+
+
+        paymentView.add(label);
         paymentView.repaint();
         paymentView.revalidate();
     }
@@ -520,6 +537,19 @@ public class Frame extends JFrame {
                 "        <p>" + part.name  + " (" + part.year + ")" + "  |  QTY: " + part.quantity + "  |  P" + part.price + " | " + "</p></p>\n" +
                 "    </body>\n" +
                 "</html>");
+        receiptView.add(label);
+        receiptView.repaint();
+        receiptView.revalidate();
+    }
+    public void receiptListTotal(Double sum)
+    {
+        JLabel label = new JLabel();
+        label.setText("<html>\n" +
+                "    <body style=\"background-color: cyan; border-radius: 6px; border-style: solid;\">\n" +
+                "        <p>"+ "TOTAL: P" +  sum + "</p>" +
+                "    </body>\n" +
+                "</html>");
+        label.setFont(new Font("Times New Roman", Font.BOLD, 16));
         receiptView.add(label);
         receiptView.repaint();
         receiptView.revalidate();

@@ -281,7 +281,14 @@ public class Controller {
                 view.paymentView.revalidate();
                 for (Part part : model.shoppingCarts.get(model.currCart).parts) {
                     view.paymentList(part);
+                    view.partPrices.add(part.price);
                 }
+                System.out.println("1st sum : "+ view.sum);
+                view.sum = 0.0;
+                for (Double price : view.partPrices) {
+                    view.sum += price;
+                }
+                view.totalPrice.setText("Total Price: P" + view.sum);
                 view.cancelBackPanel.removeAll();
                 java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
                 if (imageURL != null) {
@@ -322,6 +329,7 @@ public class Controller {
                 for (Part part : model.shoppingCarts.get(model.currCart).parts) {
                     view.receiptList(part);
                 }
+                view.receiptListTotal(view.sum);
                 view.cancelBackPanel.removeAll();
                 view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
@@ -345,7 +353,8 @@ public class Controller {
                 view.receiptView.revalidate();
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
-                view.cartView.removeAll();
+                view.partPrices.clear();
+                view.cartViews.get(model.currCart-1).removeAll();
                 view.cancelBackPanel.removeAll();
                 java.net.URL imageURL = getClass().getClassLoader().getResource("images/cancel_button.png");
                 if (imageURL != null) {
