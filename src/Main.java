@@ -15,7 +15,7 @@ public class Main{
     ArrayList<String> carBrands;
     PartTableModel tableModel;
     boolean isManager = false;
-    int currCart = 1;
+    int currCart = 0;
     ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
 
     public void overwriteFile()

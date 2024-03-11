@@ -214,10 +214,10 @@ public class Controller {
             cartButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    view.cartButtons.get(model.currCart - 1).setEnabled(true);
+                    view.cartButtons.get(model.currCart).setEnabled(true);
                     view.cartPanel.remove(view.cartViewScroll);
-                    model.currCart = cartButton.num;
-                    view.cartViewScroll = new JScrollPane(view.cartViews.get(model.currCart - 1), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                    model.currCart = cartButton.num - 1;
+                    view.cartViewScroll = new JScrollPane(view.cartViews.get(model.currCart), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                     view.cartViewScroll.getVerticalScrollBar().setUnitIncrement(16);
                     view.cartPanel.add(view.cartViewScroll, BorderLayout.CENTER);
                     cartButton.setEnabled(false);
@@ -354,7 +354,7 @@ public class Controller {
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
                 view.partPrices.clear();
-                view.cartViews.get(model.currCart-1).removeAll();
+                view.cartViews.get(model.currCart).removeAll();
                 view.cancelBackPanel.removeAll();
                 java.net.URL imageURL = getClass().getClassLoader().getResource("images/cancel_button.png");
                 if (imageURL != null) {

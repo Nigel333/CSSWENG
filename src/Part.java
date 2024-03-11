@@ -25,7 +25,7 @@ public class Part{
     public boolean equals(Object o)
     {
         Part part = (Part) o;
-        return this.carModel.equals(part.carModel) && this.name.equals(part.name) && this.isNew == part.isNew && this.authenticity.equals(part.authenticity);
+        return this.carBrand.equals(part.carBrand) && this.carModel.equals(part.carModel) && this.name.equals(part.name) && this.year == part.year && this.isNew == part.isNew && this.authenticity.equals(part.authenticity);
     }
 
     @Override

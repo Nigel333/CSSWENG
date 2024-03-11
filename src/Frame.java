@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class Frame extends JFrame {
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
     JPanel cartPanel, checkoutPanel, paymentPanel, paymentBtnsPanel, receiptPanel, cancelBackPanel;
     ArrayList<JPanel> cartViews = new ArrayList<>();
+    ArrayList<ArrayList<PartLabel>> listsOfParts = new ArrayList<>();
     JPanel checkoutView, paymentView, receiptView;
     JScrollPane cartViewScroll;
     StepButton cart, checkout, payment, receipt;
@@ -42,8 +44,6 @@ public class Frame extends JFrame {
     public Frame(Main model) {
         super("Item Database");
         this.model = model;
-
-        // initializing JTable with custom column size
 
         partTable = new JTable(model.tableModel)
         {
@@ -60,6 +60,9 @@ public class Frame extends JFrame {
             }
         };
 
+        for (int i = 0; i < 6; i++)
+            listsOfParts.add(new ArrayList<>());
+
         partTable.setPreferredScrollableViewportSize(new Dimension(300, 750));
         partTable.getColumnModel().getColumn(0).setPreferredWidth(10);
         partTable.getColumnModel().getColumn(1).setPreferredWidth(30);
@@ -75,7 +78,6 @@ public class Frame extends JFrame {
 
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setHorizontalAlignment(JLabel.CENTER);
-
 
         for (int i = 0; i < partTable.getRowCount(); i ++)
             partTable.setRowHeight(i, 60);
@@ -111,10 +113,37 @@ public class Frame extends JFrame {
 
                     buyButton.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            JOptionPane.showMessageDialog(dialog, "Added to Cart!");
-                            Part part = new Part((String) partTable.getValueAt(row,0), (String) partTable.getValueAt(row,1), (String) partTable.getValueAt(row,2), (Integer) partTable.getValueAt(row,3), 0, (Double) partTable.getValueAt(row,5), (Boolean) partTable.getValueAt(row,6), (String) partTable.getValueAt(row,7));
-                            model.shoppingCarts.get(model.currCart).parts.add(part);
-                            addToCart(model.currCart, part);
+                            Part part = new Part((String) partTable.getValueAt(row,0), (String) partTable.getValueAt(row,1), (String) partTable.getValueAt(row,2), (Integer) partTable.getValueAt(row,3), 1, (Double) partTable.getValueAt(row,5), (Boolean) partTable.getValueAt(row,6), (String) partTable.getValueAt(row,7));
+
+                            if (model.shoppingCarts.get(model.currCart).parts.contains(part))
+                            {
+                                int choice = JOptionPane.showConfirmDialog(null, "This is already in the current shopping cart. Would you like to increase the amount of the parts in the shopping cart instead?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+                                if (choice == JOptionPane.YES_OPTION)
+                                {
+                                    model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity++;
+                                    part = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part));
+                                    for (PartLabel label: listsOfParts.get(model.currCart))
+                                    {
+                                        if (label.part.equals(part))
+                                        {
+                                            label.update(part);
+                                            break;
+                                        }
+                                    }
+                                    JOptionPane.showMessageDialog(null, "Increased the amount");
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "Did not increase the amount");
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(dialog, "Added to Cart!");
+                                model.shoppingCarts.get(model.currCart).parts.add(part);
+                                addToCart(model.currCart, part);
+                            }
                             dialog.dispose();
                         }
                     });
@@ -124,7 +153,6 @@ public class Frame extends JFrame {
                             dialog.dispose();
                         }
                     });
-
                 }
             }
         });
@@ -386,7 +414,7 @@ public class Frame extends JFrame {
             cartButtons.add(new CartButton(i));
         for(int i = 0; i < cartButtons.size(); i++)
             cartsList.add(cartButtons.get(i));
-        cartButtons.get(model.currCart - 1).setEnabled(false);
+        cartButtons.get(model.currCart).setEnabled(false);
 
         cartsList.setBorder(new EmptyBorder(0,0,0,0));
 
@@ -400,7 +428,7 @@ public class Frame extends JFrame {
             cartViews.add(new JPanel());
             cartViews.get(i).setLayout(new BoxLayout(cartViews.get(i), BoxLayout.Y_AXIS));
         }
-        cartViewScroll = new JScrollPane(cartViews.get(model.currCart - 1), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        cartViewScroll = new JScrollPane(cartViews.get(model.currCart), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         cartViewScroll.getVerticalScrollBar().setUnitIncrement(16);
         cartPanel.add(cartViewScroll, BorderLayout.CENTER);
         proceedButton = new CartButton("Proceed to Checkout");
@@ -471,18 +499,11 @@ public class Frame extends JFrame {
     }
     public void addToCart(int i, Part part)
     {
-        JLabel label = new JLabel();
-        label.setText("<html>\n" +
-                "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
-                "        <p>"+ part.carBrand + "</p>\n" +
-                "        <p>" + part.carModel + " | " + part.name  + "(" + part.year + ")</p>\n" +
-                "        <p>" + part.authenticity + " | " + part.isNew + "</p>\n" +
-                "        <p>" + "P" + part.price + " | QTY: " + part.quantity + "</p>\n" +
-                "    </body>\n" +
-                "</html>");
-        cartViews.get(i - 1).add(label);
-        cartViews.get(i - 1).repaint();
-        cartViews.get(i - 1).revalidate();
+        PartLabel label = new PartLabel(part);
+        listsOfParts.get(i ).add(label);
+        cartViews.get(i).add(label);
+        cartViews.get(i).repaint();
+        cartViews.get(i).revalidate();
     }
     public void checkoutList(Part part)
     {
@@ -617,5 +638,31 @@ class CartButton extends JButton {
         {
             this.setBackground(Color.decode("#7AA4CC"));
         }
+    }
+}
+
+class PartLabel extends JLabel {
+    Part part;
+    public PartLabel(Part part){
+        this.part = part;
+        this.setText();
+    }
+
+    public void update(Part part)
+    {
+        this.part = part;
+        this.setText();
+    }
+
+    public void setText()
+    {
+        this.setText("<html>\n" +
+                "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
+                "        <p>"+ part.carBrand + "</p>\n" +
+                "        <p>" + part.carModel + " | " + part.name  + "(" + part.year + ")</p>\n" +
+                "        <p>" + part.authenticity + " | " + part.isNew + "</p>\n" +
+                "        <p>" + "P" + part.price + " | QTY: " + part.quantity + "</p>\n" +
+                "    </body>\n" +
+                "</html>");
     }
 }
