@@ -328,11 +328,11 @@ public class Controller {
                     view.partPrices.add(part.price);
                 }
                 System.out.println("1st sum : "+ view.sum);
-                view.sum = 0.0;
+                double tempPrice = 0;
                 for (Double price : view.partPrices) {
-                    view.sum += price;
+                    tempPrice += price;
                 }
-                view.totalPrice.setText("Total Price: P" + view.sum);
+                view.finalPrice.setText(Double.toString(tempPrice));
                 view.cancelBackPanel.removeAll();
                 java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
                 if (imageURL != null) {
@@ -351,7 +351,6 @@ public class Controller {
                 view.cancelBackPanel.add(new JPanel());
                 view.paymentPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
-
                 view.displayScreen = view.paymentPanel;
                 view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                 view.rightDisplay.repaint();
@@ -363,30 +362,63 @@ public class Controller {
                 view.receipt.setEnabled(false);
             }
         });
+        this.view.finalPrice.getDocument().addDocumentListener(new DocumentListener() {
+            private void update() {
+                String input = view.finalPrice.getText();
+                try
+                {
+                    Double.parseDouble(input);
+                    view.finalPrice.setBackground(Color.WHITE);
+                } catch (Exception exception)
+                {
+                    view.finalPrice.setBackground(Color.decode("#FFCCCC"));
+                }
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { update(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { update(); }
+        });
         view.payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.cartNum[model.currCart] = 3;
-                view.rightDisplay.remove(view.displayScreen);
-                view.receiptView.removeAll();
-                view.receiptView.repaint();
-                view.receiptView.revalidate();
-                for (Part part : model.shoppingCarts.get(model.currCart).parts) {
-                    view.receiptList(part);
+                if (!view.finalPrice.getBackground().equals(Color.WHITE))
+                    JOptionPane.showMessageDialog(null, "Error Occured");
+                else
+                {
+                    model.shoppingCarts.get(model.currCart).finalPrice = Double.parseDouble(view.finalPrice.getText());
+                    view.cartNum[model.currCart] = 3;
+                    view.rightDisplay.remove(view.displayScreen);
+                    view.receiptView.removeAll();
+                    view.receiptView.repaint();
+                    view.receiptView.revalidate();
+                    for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                        view.receiptList(part);
+                        for (Part data: model.parts)
+                            if(data.equals(part))
+                                data.quantity -= part.quantity;
+                    }
+                    model.tableModel.changeParts(model.parts);
+                    if (model.tableModel.getRowCount() != 0)
+                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+
+                    view.finalPrice.getText();
+                    view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
+                    view.cancelBackPanel.removeAll();
+                    view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
+                    view.displayScreen = view.receiptPanel;
+                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                    view.rightDisplay.repaint();
+                    view.rightDisplay.revalidate();
+
+                    view.cart.setEnabled(false);
+                    view.checkout.setEnabled(false);
+                    view.payment.setEnabled(false);
+                    view.receipt.setEnabled(true);
                 }
-                view.receiptListTotal(view.sum);
-                view.cancelBackPanel.removeAll();
-                view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
-
-                view.displayScreen = view.receiptPanel;
-                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                view.rightDisplay.repaint();
-                view.rightDisplay.revalidate();
-
-                view.cart.setEnabled(false);
-                view.checkout.setEnabled(false);
-                view.payment.setEnabled(false);
-                view.receipt.setEnabled(true);
             }
         });
         view.printButton.addActionListener(new ActionListener() {

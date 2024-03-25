@@ -26,7 +26,7 @@ public class Frame extends JFrame {
 
     JTextField searchField;
     JPanel logoAndTimePanel, accountPanel;
-    JLabel clock, setting, totalPrice;
+    JLabel clock, setting;
     JButton account;
     ImageIcon accountIcon;
     JPanel stepsPanel, cartsList, rightDisplay, displayScreen;
@@ -36,6 +36,7 @@ public class Frame extends JFrame {
     JPanel checkoutView, paymentView, receiptView;
     JScrollPane cartViewScroll;
     StepButton cart, checkout, payment, receipt;
+    JTextField finalPrice;
 
     CartButton proceedButton, proceed2PayButton, calculateButton, payButton, printButton, cancelOrderButton, backButtonChk, backButtonPay;
     ArrayList<CartButton> cartButtons = new ArrayList<>();
@@ -480,8 +481,8 @@ public class Frame extends JFrame {
          */
         paymentBtnsPanel = new JPanel(new BorderLayout());
 
-        totalPrice = new JLabel();
-        paymentBtnsPanel.add(totalPrice, BorderLayout.NORTH);
+        finalPrice = new JTextField();
+        paymentBtnsPanel.add(finalPrice, BorderLayout.NORTH);
         paymentBtnsPanel.add(payButton,BorderLayout.CENTER);
         paymentPanel.add(paymentBtnsPanel, BorderLayout.SOUTH);
         backButtonPay = new CartButton();
