@@ -222,11 +222,53 @@ public class Controller {
                     view.cartPanel.add(view.cartViewScroll, BorderLayout.CENTER);
                     cartButton.setEnabled(false);
 
-                    view.rightDisplay.remove(view.displayScreen);
-                    view.displayScreen = view.cartPanel;
-                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                    view.rightDisplay.repaint();
-                    view.rightDisplay.revalidate();
+                    switch(view.cartNum[model.currCart]){
+                        case 0: view.rightDisplay.remove(view.displayScreen);
+                                view.displayScreen = view.cartPanel;
+                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                view.rightDisplay.repaint();
+                                view.rightDisplay.revalidate();
+
+                                view.cart.setEnabled(true);
+                                view.checkout.setEnabled(false);
+                                view.payment.setEnabled(false);
+                                view.receipt.setEnabled(false);
+                                break;
+                        case 1: view.rightDisplay.remove(view.displayScreen);
+                                view.displayScreen = view.checkoutPanel;
+                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                view.rightDisplay.repaint();
+                                view.rightDisplay.revalidate();
+
+                                view.cart.setEnabled(false);
+                                view.checkout.setEnabled(true);
+                                view.payment.setEnabled(false);
+                                view.receipt.setEnabled(false);
+                                break;
+                        case 2: view.rightDisplay.remove(view.displayScreen);
+                                view.displayScreen = view.paymentPanel;
+                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                view.rightDisplay.repaint();
+                                view.rightDisplay.revalidate();
+
+                                view.cart.setEnabled(false);
+                                view.checkout.setEnabled(false);
+                                view.payment.setEnabled(true);
+                                view.receipt.setEnabled(false);
+                                break;
+                        case 3: view.rightDisplay.remove(view.displayScreen);
+                                view.displayScreen = view.receiptPanel;
+                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                view.rightDisplay.repaint();
+                                view.rightDisplay.revalidate();
+
+                                view.cart.setEnabled(false);
+                                view.checkout.setEnabled(false);
+                                view.payment.setEnabled(false);
+                                view.receipt.setEnabled(true);
+                                break;
+                    }
+
                 }
             });
         }
@@ -235,6 +277,7 @@ public class Controller {
         view.proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.cartNum[model.currCart] = 1;
                 view.rightDisplay.remove(view.displayScreen);
                 view.checkoutView.removeAll();
                 view.checkoutView.repaint();
@@ -275,6 +318,7 @@ public class Controller {
         view.proceed2PayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.cartNum[model.currCart] = 2;
                 view.rightDisplay.remove(view.displayScreen);
                 view.paymentView.removeAll();
                 view.paymentView.repaint();
@@ -322,6 +366,7 @@ public class Controller {
         view.payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.cartNum[model.currCart] = 3;
                 view.rightDisplay.remove(view.displayScreen);
                 view.receiptView.removeAll();
                 view.receiptView.repaint();
@@ -347,10 +392,15 @@ public class Controller {
         view.printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.cartNum[model.currCart] = 0;
                 view.rightDisplay.remove(view.displayScreen);
                 view.receiptView.removeAll();
                 view.receiptView.repaint();
                 view.receiptView.revalidate();
+                /* test */
+                for(int i = 0; i < 5; i++){
+                    System.out.println(model.shoppingCarts.get(i).parts);
+                }
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
                 view.partPrices.clear();
@@ -398,6 +448,7 @@ public class Controller {
         view.backButtonChk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.cartNum[model.currCart] = 0;
                 System.out.print("TESTING");
                 view.rightDisplay.remove(view.displayScreen);
                 view.cancelBackPanel.removeAll();
@@ -422,6 +473,7 @@ public class Controller {
         view.backButtonPay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.cartNum[model.currCart] = 1;
                 System.out.print("TESTING");
                 view.rightDisplay.remove(view.displayScreen);
                 view.cancelBackPanel.removeAll();

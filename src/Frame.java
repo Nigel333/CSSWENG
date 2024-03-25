@@ -39,6 +39,7 @@ public class Frame extends JFrame {
 
     CartButton proceedButton, proceed2PayButton, calculateButton, payButton, printButton, cancelOrderButton, backButtonChk, backButtonPay;
     ArrayList<CartButton> cartButtons = new ArrayList<>();
+    int[] cartNum = new int[5];
     ArrayList<Double> partPrices = new ArrayList<>();
     Double sum = 0.0;
     public Frame(Main model) {
@@ -386,6 +387,10 @@ public class Frame extends JFrame {
         rightPanel.setBackground(Color.decode("#4472C4"));
         rightPanel.setPreferredSize(new Dimension(345,0));
         stepsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+
+        for(int i = 0; i < 4; i++){
+            cartNum[i] = 0;
+        }
         cart = new StepButton("Cart");
         cart.setPreferredSize(new Dimension(77,50));
         cart.setFont(new Font("Verdana", Font.BOLD, 11));
