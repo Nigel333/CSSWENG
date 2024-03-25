@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -185,6 +186,202 @@ public class Controller {
                     {
                         view.account.setIcon(new ImageIcon("resources/manager.png"));
                         model.isManager = true;
+
+                        JDialog dialog = new JDialog(view, "Manager Settings", true);
+                        JPanel panel = new JPanel(new BorderLayout());
+                        panel.setBackground(Color.ORANGE);
+                        JPanel optionPanel = new JPanel(new FlowLayout());
+                        optionPanel.setBackground(Color.ORANGE);
+                        JButton add = new JButton("ADD");
+                        add.setPreferredSize(new Dimension(200, 30));
+                        JButton update = new JButton("UPDATE");
+                        update.setPreferredSize(new Dimension(200, 30));
+                        JButton delete = new JButton("DELETE");
+                        delete.setPreferredSize(new Dimension(200, 30));
+                        optionPanel.add(add);
+                        optionPanel.add(update);
+                        optionPanel.add(delete);
+                        panel.add(optionPanel, BorderLayout.NORTH);
+                        dialog.getContentPane().add(panel);
+
+                        JPanel addPanel;
+                        JPanel updatePanel;
+                        JPanel deletePanel;
+                        final JPanel[] currPanel = new JPanel[1];
+
+                        addPanel = new JPanel(new GridBagLayout());
+                        addPanel.setBackground(Color.ORANGE);
+                        GridBagConstraints gbc = new GridBagConstraints();
+                        gbc.insets = new Insets(5, 5, 5, 5);
+                        JButton addButton = new JButton("ADD");
+                        JTextField carBrand = new JTextField(20);
+                        JTextField carModel = new JTextField(20);
+                        JTextField name = new JTextField(20);
+                        JTextField year = new JTextField(20);
+                        JTextField quantity = new JTextField(20);
+                        JTextField price = new JTextField(20);
+                        JComboBox condition = new JComboBox(new String[]{"NEW", "OLD"});
+                        JComboBox authenticity1 = new JComboBox(new String[]{"ORIGINAL", "CLASS A", "OTHERS"});
+                        JTextField authenticity2 = new JTextField(15);
+                        authenticity2.setEnabled(false);
+                        authenticity1.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if(authenticity1.getSelectedIndex() == 2)
+                                    authenticity2.setEnabled(true);
+                                else
+                                    authenticity2.setEnabled(false);
+                            }
+                        });
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 0;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Car Brand: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(carBrand, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 1;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Car Model: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(carModel, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 2;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Name: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(name, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 0;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Car Brand: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(carBrand, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 1;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Car Model: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(carModel, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 2;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Name: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(name, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 3;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Year: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(year, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 4;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Quantity: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(quantity, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 5;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Price: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(price, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 6;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Condition: "), gbc);
+                        gbc.gridx = 1;
+                        gbc.gridwidth = 2;
+                        addPanel.add(condition, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 7;
+                        gbc.gridwidth = 1;
+                        addPanel.add(new JLabel("Authenticity: "), gbc);
+                        gbc.gridx = 1;
+                        addPanel.add(authenticity1, gbc);
+                        gbc.gridx = 2;
+                        addPanel.add(authenticity2, gbc);
+
+                        gbc.gridx = 0;
+                        gbc.gridy = 8;
+                        gbc.gridwidth = 3;
+                        addPanel.add(addButton, gbc);
+
+                        updatePanel = new JPanel();
+                        updatePanel.add(new JLabel("update"));
+                        deletePanel = new JPanel();
+                        deletePanel.add(new JLabel("delete"));
+
+                        currPanel[0] = addPanel;
+                        panel.add(currPanel[0], BorderLayout.CENTER);
+
+                        add.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                panel.remove(currPanel[0]);
+                                currPanel[0] = addPanel;
+                                panel.add(currPanel[0], BorderLayout.CENTER); // Specify layout constraints
+                                panel.revalidate(); // Refresh layout
+                                panel.repaint(); // Repaint panel
+                            }
+                        });
+
+                        update.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                panel.remove(currPanel[0]);
+                                currPanel[0] = updatePanel;
+                                panel.add(currPanel[0], BorderLayout.CENTER);
+                                panel.revalidate();
+                                panel.repaint();
+                            }
+                        });
+
+                        delete.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                panel.remove(currPanel[0]);
+                                currPanel[0] = deletePanel;
+                                panel.add(currPanel[0], BorderLayout.CENTER);
+                                panel.revalidate();
+                                panel.repaint();
+                            }
+                        });
+
+                        panel.add(addPanel, BorderLayout.CENTER);
+
+                        dialog.setSize(800, 500);
+                        dialog.setLocationRelativeTo(view);
+                        dialog.setVisible(true);
+
+                        dialog.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                view.account.setIcon(new ImageIcon("resources/regular.png"));
+                                model.isManager = false;
+                            }
+                        });
                     }
                     else
                         JOptionPane.showMessageDialog(null, "Wrong Password Inputted. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);

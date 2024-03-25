@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -212,12 +213,11 @@ public class Frame extends JFrame {
 
         clock = new JLabel();
         clock.setForeground(Color.WHITE);
-        clock.setFont(new Font("Verdana",  Font.BOLD, 15));
         Timer t = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clock.setText("<html><h2 style=\"color: white; padding:5px; \">" + new Date().toLocaleString().split(", ")[0]
-                            + "<br>" + new Date().toLocaleString().split(", ")[1] + "</h2>");
+                clock.setText("<html><p style=\"color: white; padding:3px; font-family: Verdana; font-size: 12px;border:solid\">" + new SimpleDateFormat("MMM dd, yyyy").format(new Date())+
+                        "<br>" +  new SimpleDateFormat("hh:mm:ss a").format(new Date()) + "</p>");
             }
         });
         t.start();
