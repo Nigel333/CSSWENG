@@ -5,6 +5,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -645,10 +646,13 @@ public class Controller {
                 view.receiptView.removeAll();
                 view.receiptView.repaint();
                 view.receiptView.revalidate();
-                /* test */
+                /* test
                 for(int i = 0; i < 5; i++){
                     System.out.println(model.shoppingCarts.get(i).parts);
                 }
+                */
+                CreateFile();
+                WriteToFile(view.receiptCtr, model.shoppingCarts.get(model.currCart).parts, view.sum);
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
                 view.partPrices.clear();
@@ -682,7 +686,7 @@ public class Controller {
                 view.payment.setEnabled(false);
                 view.receipt.setEnabled(false);
 
-                CreateFile();
+
             }
         });
         view.cancelOrderButton.addActionListener(new ActionListener() {
@@ -983,7 +987,22 @@ public class Controller {
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
-            e.printStackTrace();
         }
     }
-}
+    public void WriteToFile(int fileNum,ArrayList<Part> parts, double total ) {
+            try {
+                FileWriter myWriter = new FileWriter("./Receipts/" + view.date + "/" +  (fileNum-1) + ".txt");
+                myWriter.write("---------------------------------------------------------------------\n");
+                for(Part part : parts){
+                    myWriter.write(part + "\n");
+                }
+                myWriter.write("---------------------------------------------------------------------\n");
+                myWriter.write("Total: " + total);
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+            }
+        }
+
+    }
