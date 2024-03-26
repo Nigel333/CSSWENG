@@ -10,6 +10,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.table.AbstractTableModel;
 
+import java.io.File;
+import java.io.IOException;
 public class Main{
     ArrayList<Part> parts = new ArrayList<>();
     ArrayList<String> carBrands;

@@ -3,6 +3,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
@@ -387,6 +389,8 @@ public class Controller {
                 view.checkout.setEnabled(false);
                 view.payment.setEnabled(false);
                 view.receipt.setEnabled(true);
+
+                model.overwriteFile();
             }
         });
         view.printButton.addActionListener(new ActionListener() {
@@ -433,6 +437,8 @@ public class Controller {
                 view.checkout.setEnabled(false);
                 view.payment.setEnabled(false);
                 view.receipt.setEnabled(false);
+
+                CreateFile();
             }
         });
         view.cancelOrderButton.addActionListener(new ActionListener() {
@@ -494,6 +500,7 @@ public class Controller {
                 view.receipt.setEnabled(false);
             }
         });
+
     }
     public void filter() {
         try {
@@ -693,6 +700,46 @@ public class Controller {
             view.partTable.revalidate();
         } catch (Exception e) {
             System.err.println(e);
+        }
+    }
+    public void CreateFile ()
+    {
+        try {
+            String directoryPath = "./Receipts/" + view.date + "/";
+            File directory = new File(directoryPath);
+
+
+            //this will make directory for receipts of a new day
+            if (!directory.exists()) {
+                directory.mkdirs(); // mkdirs() will create parent directories if they don't exist
+                System.out.println("Directory created: " + directory.getAbsolutePath());
+            }else {
+                File[] files = directory.listFiles();
+                if (files != null && files.length > 0) {
+                    int lastNum = 0;
+                    for (File file : files) {
+                        if (file.isFile() && file.getName().endsWith(".txt")) {
+                            String fileName = file.getName().replace(".txt", "");
+                            int num = Integer.parseInt(fileName);
+                            if (num > lastNum) {
+                                lastNum = num;
+                            }
+                        }
+                    }
+                    view.receiptCtr = lastNum + 1; // Set the counter to the next number
+                }
+            }
+
+            File receipt = new File(directory, view.receiptCtr + ".txt");
+            if (receipt.createNewFile()) {
+                System.out.println("File created: " + receipt.getAbsolutePath());
+                view.receiptCtr++;
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
     }
 }

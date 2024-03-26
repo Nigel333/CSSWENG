@@ -42,6 +42,8 @@ public class Frame extends JFrame {
     int[] cartNum = new int[5];
     ArrayList<Double> partPrices = new ArrayList<>();
     Double sum = 0.0;
+    int receiptCtr = 1;
+    String date;
     public Frame(Main model) {
         super("Item Database");
         this.model = model;
@@ -221,6 +223,7 @@ public class Frame extends JFrame {
         });
         t.start();
         clock.setBorder(new EmptyBorder(0, 0, 0, 5));
+        date = new Date().toLocaleString().split(", ")[0];
 
         ImageIcon logoIconOriginal = new ImageIcon("resources/KSClogo.png");
         Image image = logoIconOriginal.getImage();
