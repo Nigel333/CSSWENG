@@ -1,7 +1,9 @@
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -177,234 +179,791 @@ public class Controller {
         this.view.account.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.account.setEnabled(false);
-                if (!model.isManager)
+                String password = "";
+                Object[] option = {"Enter"};
+                JPasswordField passwordField = new JPasswordField();
+                if(JOptionPane.showOptionDialog(null, passwordField, "Please Enter the Password", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]) == 0)
+                    password = passwordField.getText();
+                if(password.equals("password"))
                 {
-                    String password = "";
-                    Object[] option = {"Enter"};
-                    JPasswordField passwordField = new JPasswordField();
-                    if(JOptionPane.showOptionDialog(null, passwordField, "Please Enter the Password", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]) == 0)
-                        password = passwordField.getText();
-                    if(password.equals("password"))
-                    {
-                        view.account.setIcon(new ImageIcon("resources/manager.png"));
-                        model.isManager = true;
+                    view.account.setIcon(new ImageIcon("resources/manager.png"));
 
-                        JDialog dialog = new JDialog(view, "Manager Settings", true);
-                        JPanel panel = new JPanel(new BorderLayout());
-                        panel.setBackground(Color.ORANGE);
-                        JPanel optionPanel = new JPanel(new FlowLayout());
-                        optionPanel.setBackground(Color.ORANGE);
-                        JButton add = new JButton("ADD");
-                        add.setPreferredSize(new Dimension(200, 30));
-                        JButton update = new JButton("UPDATE");
-                        update.setPreferredSize(new Dimension(200, 30));
-                        JButton delete = new JButton("DELETE");
-                        delete.setPreferredSize(new Dimension(200, 30));
-                        optionPanel.add(add);
-                        optionPanel.add(update);
-                        optionPanel.add(delete);
-                        panel.add(optionPanel, BorderLayout.NORTH);
-                        dialog.getContentPane().add(panel);
+                    JDialog dialog = new JDialog(view, "Manager Settings", true);
+                    JPanel panel = new JPanel(new BorderLayout());
+                    panel.setBackground(Color.ORANGE);
+                    JPanel optionPanel = new JPanel(new FlowLayout());
+                    optionPanel.setBackground(Color.ORANGE);
+                    JButton add = new JButton("ADD");
+                    add.setPreferredSize(new Dimension(200, 30));
+                    JButton update = new JButton("UPDATE");
+                    update.setPreferredSize(new Dimension(200, 30));
+                    JButton delete = new JButton("DELETE");
+                    delete.setPreferredSize(new Dimension(200, 30));
+                    optionPanel.add(add);
+                    optionPanel.add(update);
+                    optionPanel.add(delete);
+                    panel.add(optionPanel, BorderLayout.NORTH);
+                    dialog.getContentPane().add(panel);
 
-                        JPanel addPanel;
-                        JPanel updatePanel;
-                        JPanel deletePanel;
-                        final JPanel[] currPanel = new JPanel[1];
+                    JPanel addPanel;
+                    final JPanel[] updatePanel = new JPanel[1];
+                    JPanel deletePanel;
+                    final JPanel[] currPanel = new JPanel[1];
 
-                        addPanel = new JPanel(new GridBagLayout());
-                        addPanel.setBackground(Color.ORANGE);
-                        GridBagConstraints gbc = new GridBagConstraints();
-                        gbc.insets = new Insets(5, 5, 5, 5);
-                        JButton addButton = new JButton("ADD");
-                        JTextField carBrand = new JTextField(20);
-                        JTextField carModel = new JTextField(20);
-                        JTextField name = new JTextField(20);
-                        JTextField year = new JTextField(20);
-                        JTextField quantity = new JTextField(20);
-                        JTextField price = new JTextField(20);
-                        JComboBox condition = new JComboBox(new String[]{"NEW", "OLD"});
-                        JComboBox authenticity1 = new JComboBox(new String[]{"ORIGINAL", "CLASS A", "OTHERS"});
-                        JTextField authenticity2 = new JTextField(15);
-                        authenticity2.setEnabled(false);
-                        authenticity1.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if(authenticity1.getSelectedIndex() == 2)
-                                    authenticity2.setEnabled(true);
+                    addPanel = new JPanel(new GridBagLayout());
+                    addPanel.setBackground(Color.ORANGE);
+                    GridBagConstraints gbc = new GridBagConstraints();
+                    gbc.insets = new Insets(5, 5, 5, 5);
+                    JButton addButton = new JButton("ADD");
+                    JTextField carBrand = new JTextField(20);
+                    JTextField carModel = new JTextField(20);
+                    JTextField name = new JTextField(20);
+                    JTextField year = new JTextField(20);
+                    JTextField quantity = new JTextField(20);
+                    JTextField price = new JTextField(20);
+                    JComboBox condition = new JComboBox(new String[]{"NEW", "OLD"});
+                    JComboBox authenticity1 = new JComboBox(new String[]{"ORIGINAL", "CLASS A", "OTHERS"});
+                    JTextField authenticity2 = new JTextField(15);
+                    authenticity2.setEnabled(false);
+                    authenticity1.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if(authenticity1.getSelectedIndex() == 2)
+                                authenticity2.setEnabled(true);
+                            else
+                                authenticity2.setEnabled(false);
+                        }
+                    });
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 0;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Car Brand: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(carBrand, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 1;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Car Model: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(carModel, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 2;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Name: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(name, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 0;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Car Brand: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(carBrand, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 1;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Car Model: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(carModel, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 2;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Name: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(name, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 3;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Year: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(year, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 4;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Quantity: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(quantity, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 5;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Price: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(price, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 6;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Condition: "), gbc);
+                    gbc.gridx = 1;
+                    gbc.gridwidth = 2;
+                    addPanel.add(condition, gbc);
+
+                    gbc.gridx = 0;
+                    gbc.gridy = 7;
+                    gbc.gridwidth = 1;
+                    addPanel.add(new JLabel("Authenticity: "), gbc);
+                    gbc.gridx = 1;
+                    addPanel.add(authenticity1, gbc);
+                    gbc.gridx = 2;
+                    addPanel.add(authenticity2, gbc);
+
+                    addButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            boolean error = false;
+                            try
+                            {
+                                if(Integer.parseInt(year.getText()) > 9999 || Integer.parseInt(year.getText()) < 0)
+                                {
+                                    year.setBackground(Color.decode("#FFCCCC"));
+                                    error = true;
+                                }
                                 else
-                                    authenticity2.setEnabled(false);
+                                    year.setBackground(Color.WHITE);
+                            } catch (Exception err)
+                            {
+                                year.setBackground(Color.decode("#FFCCCC"));
+                                error = true;
                             }
-                        });
 
-                        gbc.gridx = 0;
-                        gbc.gridy = 0;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Car Brand: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(carBrand, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 1;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Car Model: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(carModel, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 2;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Name: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(name, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 0;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Car Brand: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(carBrand, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 1;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Car Model: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(carModel, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 2;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Name: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(name, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 3;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Year: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(year, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 4;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Quantity: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(quantity, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 5;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Price: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(price, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 6;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Condition: "), gbc);
-                        gbc.gridx = 1;
-                        gbc.gridwidth = 2;
-                        addPanel.add(condition, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 7;
-                        gbc.gridwidth = 1;
-                        addPanel.add(new JLabel("Authenticity: "), gbc);
-                        gbc.gridx = 1;
-                        addPanel.add(authenticity1, gbc);
-                        gbc.gridx = 2;
-                        addPanel.add(authenticity2, gbc);
-
-                        gbc.gridx = 0;
-                        gbc.gridy = 8;
-                        gbc.gridwidth = 3;
-                        addPanel.add(addButton, gbc);
-
-                        updatePanel = new JPanel();
-                        updatePanel.add(new JLabel("update"));
-                        deletePanel = new JPanel();
-                        deletePanel.add(new JLabel("delete"));
-
-                        currPanel[0] = addPanel;
-                        panel.add(currPanel[0], BorderLayout.CENTER);
-
-                        add.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                panel.remove(currPanel[0]);
-                                currPanel[0] = addPanel;
-                                panel.add(currPanel[0], BorderLayout.CENTER); // Specify layout constraints
-                                panel.revalidate(); // Refresh layout
-                                panel.repaint(); // Repaint panel
+                            try
+                            {
+                                Integer.parseInt(quantity.getText());
+                                quantity.setBackground(Color.WHITE);
+                            } catch (Exception err)
+                            {
+                                quantity.setBackground(Color.decode("#FFCCCC"));
+                                error = true;
                             }
-                        });
 
-                        update.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+                            try
+                            {
+                                Double.parseDouble(price.getText());
+                                price.setBackground(Color.WHITE);
+                            } catch (Exception err)
+                            {
+                                price.setBackground(Color.decode("#FFCCCC"));
+                                error = true;
+                            }
+
+                            if(carBrand.getText().equals(""))
+                            {
+                                carBrand.setBackground(Color.decode("#FFCCCC"));
+                                error = true;
+                            }
+                            else
+                                carBrand.setBackground(Color.WHITE);
+                            if(carModel.getText().equals(""))
+                            {
+                                carModel.setBackground(Color.decode("#FFCCCC"));
+                                error = true;
+                            }
+                            else
+                                carModel.setBackground(Color.WHITE);
+                            if(name.getText().equals(""))
+                            {
+                                name.setBackground(Color.decode("#FFCCCC"));
+                                error = true;
+                            }
+                            else
+                                name.setBackground(Color.WHITE);
+                            if(authenticity1.getSelectedIndex() == 2 && authenticity2.getText().equals(""))
+                            {
+                                authenticity2.setBackground(Color.decode("#FFCCCC"));
+                                error = true;
+                            }
+                            else
+                                authenticity2.setBackground(Color.WHITE);
+
+                            if(error)
+                                JOptionPane.showMessageDialog(dialog, "Error Occurred!");
+                            else
+                            {
+                                String auth;
+                                if(authenticity1.getSelectedIndex() != 2)
+                                    auth = authenticity1.getSelectedItem().toString();
+                                else
+                                    auth = authenticity2.getText();
+                                Part part = new Part(carBrand.getText().toUpperCase(), carModel.getText().toUpperCase(), name.getText().toUpperCase(), Integer.parseInt(year.getText()), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), condition.getSelectedIndex() == 0, auth.toUpperCase());
+                                if(model.parts.contains(part))
+                                {
+                                    if(JOptionPane.showConfirmDialog(null, "This is already in the database already. Would you like to increase the quantity of the parts in the database instead?", "Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                                    {
+                                        model.parts.get(model.parts.indexOf(part)).quantity += part.quantity;
+                                        model.tableModel.changeParts(model.parts);
+                                        if (model.tableModel.getRowCount() != 0)
+                                            model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                                        JOptionPane.showMessageDialog(dialog, "Successfully Saved to Database!");
+                                    }
+                                    else
+                                        JOptionPane.showMessageDialog(dialog, "Did Not Do Anything");
+                                }
+                                else
+                                {
+                                    model.parts.add(part);
+                                    model.tableModel.changeParts(model.parts);
+                                    if (model.tableModel.getRowCount() != 0)
+                                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                                    JOptionPane.showMessageDialog(dialog, "Part Successfully Added to Database!");
+                                }
+                            }
+                            filter();
+                        }
+                    });
+                    gbc.gridx = 0;
+                    gbc.gridy = 8;
+                    gbc.gridwidth = 3;
+                    addPanel.add(addButton, gbc);
+
+                    JPanel update1 = new JPanel(new BorderLayout());
+                    JTable updateTable = new JTable(model.tableModel)
+                    {
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
+                        {
+                            Component c = super.prepareRenderer(renderer, row, column);
+                            JComponent jc = (JComponent)c;
+                            jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#92D050")));
+                            jc.setBackground(Color.decode("#385723"));
+                            jc.setForeground(Color.WHITE);
+                            jc.setFont(new Font("Verdana", Font.BOLD, 11));
+                            return c;
+                        }
+                    };
+                    updateTable.setPreferredScrollableViewportSize(new Dimension(300, 750));
+                    updateTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+                    updateTable.getColumnModel().getColumn(1).setPreferredWidth(30);
+                    updateTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+                    updateTable.getColumnModel().getColumn(3).setPreferredWidth(8);
+                    updateTable.getColumnModel().getColumn(4).setPreferredWidth(5);
+                    updateTable.getColumnModel().getColumn(5).setPreferredWidth(10);
+                    updateTable.getColumnModel().getColumn(6).setPreferredWidth(3);
+                    updateTable.getColumnModel().getColumn(7).setPreferredWidth(10);
+                    for (int i = 0; i < updateTable.getRowCount(); i ++)
+                        updateTable.setRowHeight(i, 60);
+                    DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
+                    cellRenderer.setHorizontalAlignment(JLabel.CENTER);
+                    for (int i = 0; i < updateTable.getColumnCount(); i ++)
+                        if(i != 6)
+                            updateTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+                    updateTable.addMouseListener(new MouseAdapter()
+                    {
+                        public void mouseClicked(MouseEvent me)
+                        {
+                            if (me.getClickCount() == 2)
+                            {
+                                JTable target = (JTable) me.getSource();
+                                int row = target.getSelectedRow();
+                                JButton backButton = new JButton("<");
+                                JButton updateButton = new JButton("Update");
+                                JTextField carBrand = new JTextField(20);
+                                JTextField carModel = new JTextField(20);
+                                JTextField name = new JTextField(20);
+                                JTextField year = new JTextField(20);
+                                JTextField quantity = new JTextField(20);
+                                JTextField price = new JTextField(20);
+                                JComboBox condition = new JComboBox(new String[]{"NEW", "OLD"});
+                                JComboBox authenticity1 = new JComboBox(new String[]{"ORIGINAL", "CLASS A", "OTHERS"});
+                                JTextField authenticity2 = new JTextField(15);
+                                Part part = new Part((String) updateTable.getValueAt(row,0), (String) updateTable.getValueAt(row,1), (String) updateTable.getValueAt(row,2), (Integer) updateTable.getValueAt(row,3), (Integer) updateTable.getValueAt(row,4), (Double) updateTable.getValueAt(row,5), (Boolean) updateTable.getValueAt(row,6), (String) updateTable.getValueAt(row,7));
+                                carBrand.setText(part.carBrand);
+                                carModel.setText(part.carModel);
+                                name.setText(part.name);
+                                year.setText(String.valueOf(part.year));
+                                quantity.setText(String.valueOf(part.quantity));
+                                price.setText(String.valueOf(part.price));
+                                condition.setSelectedIndex(part.isNew ? 0 : 1);
+                                authenticity2.setEnabled(false);
+                                if(part.authenticity.equals("ORIGINAL") || part.authenticity.equals("CLASS A"))
+                                    authenticity1.setSelectedItem(part.authenticity);
+                                else
+                                {
+                                    authenticity2.setEnabled(true);
+                                    authenticity1.setSelectedIndex(2);
+                                    authenticity2.setText(part.authenticity);
+                                }
+                                authenticity1.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if(authenticity1.getSelectedIndex() == 2)
+                                            authenticity2.setEnabled(true);
+                                        else
+                                            authenticity2.setEnabled(false);
+                                    }
+                                });
                                 panel.remove(currPanel[0]);
-                                currPanel[0] = updatePanel;
-                                panel.add(currPanel[0], BorderLayout.CENTER);
+                                updatePanel[0] = new JPanel(new GridBagLayout());
+                                currPanel[0] = updatePanel[0];
+                                panel.add(currPanel[0]);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 0;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Car Brand: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(carBrand, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 1;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Car Model: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(carModel, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 2;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Name: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(name, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 0;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Car Brand: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(carBrand, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 1;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Car Model: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(carModel, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 2;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Name: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(name, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 3;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Year: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(year, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 4;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Quantity: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(quantity, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 5;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Price: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(price, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 6;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Condition: "), gbc);
+                                gbc.gridx = 1;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(condition, gbc);
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 7;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(new JLabel("Authenticity: "), gbc);
+                                gbc.gridx = 1;
+                                updatePanel[0].add(authenticity1, gbc);
+                                gbc.gridx = 2;
+                                updatePanel[0].add(authenticity2, gbc);
+
+                                backButton.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        panel.remove(currPanel[0]);
+                                        updatePanel[0] = update1;
+                                        currPanel[0] = updatePanel[0];
+                                        panel.add(currPanel[0]);
+                                        panel.revalidate();
+                                        panel.repaint();
+                                    }
+                                });
+                                gbc.gridx = 0;
+                                gbc.gridy = 8;
+                                gbc.gridwidth = 1;
+                                updatePanel[0].add(backButton, gbc);
+
+                                updateButton.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        int row = updateTable.getSelectedRow();
+                                        Part oldPart = new Part((String) updateTable.getValueAt(row,0), (String) updateTable.getValueAt(row,1), (String) updateTable.getValueAt(row,2), (Integer) updateTable.getValueAt(row,3), (Integer) updateTable.getValueAt(row,4), (Double) updateTable.getValueAt(row,5), (Boolean) updateTable.getValueAt(row,6), (String) updateTable.getValueAt(row,7));
+                                        boolean error = false;
+                                        try
+                                        {
+                                            if(Integer.parseInt(year.getText()) > 9999 || Integer.parseInt(year.getText()) < 0)
+                                            {
+                                                year.setBackground(Color.decode("#FFCCCC"));
+                                                error = true;
+                                            }
+                                            else
+                                                year.setBackground(Color.WHITE);
+                                        } catch (Exception err)
+                                        {
+                                            year.setBackground(Color.decode("#FFCCCC"));
+                                            error = true;
+                                        }
+
+                                        try
+                                        {
+                                            Integer.parseInt(quantity.getText());
+                                            quantity.setBackground(Color.WHITE);
+                                        } catch (Exception err)
+                                        {
+                                            quantity.setBackground(Color.decode("#FFCCCC"));
+                                            error = true;
+                                        }
+
+                                        try
+                                        {
+                                            Double.parseDouble(price.getText());
+                                            price.setBackground(Color.WHITE);
+                                        } catch (Exception err)
+                                        {
+                                            price.setBackground(Color.decode("#FFCCCC"));
+                                            error = true;
+                                        }
+
+                                        if(carBrand.getText().equals(""))
+                                        {
+                                            carBrand.setBackground(Color.decode("#FFCCCC"));
+                                            error = true;
+                                        }
+                                        else
+                                            carBrand.setBackground(Color.WHITE);
+                                        if(carModel.getText().equals(""))
+                                        {
+                                            carModel.setBackground(Color.decode("#FFCCCC"));
+                                            error = true;
+                                        }
+                                        else
+                                            carModel.setBackground(Color.WHITE);
+                                        if(name.getText().equals(""))
+                                        {
+                                            name.setBackground(Color.decode("#FFCCCC"));
+                                            error = true;
+                                        }
+                                        else
+                                            name.setBackground(Color.WHITE);
+                                        if(authenticity1.getSelectedIndex() == 2 && authenticity2.getText().equals(""))
+                                        {
+                                            authenticity2.setBackground(Color.decode("#FFCCCC"));
+                                            error = true;
+                                        }
+                                        else
+                                            authenticity2.setBackground(Color.WHITE);
+
+                                        if(error)
+                                            JOptionPane.showMessageDialog(dialog, "Error Occurred!");
+                                        else
+                                        {
+                                            String auth;
+                                            if(authenticity1.getSelectedIndex() != 2)
+                                                auth = authenticity1.getSelectedItem().toString();
+                                            else
+                                                auth = authenticity2.getText();
+                                            Part part = new Part(carBrand.getText().toUpperCase(), carModel.getText().toUpperCase(), name.getText().toUpperCase(), Integer.parseInt(year.getText()), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), condition.getSelectedIndex() == 0, auth.toUpperCase());
+                                            if(oldPart.equals(part))
+                                            {
+                                                if(oldPart.quantity == part.quantity && oldPart.price == part.price)
+                                                    JOptionPane.showMessageDialog(dialog,"There has been no change made.");
+                                                else
+                                                {
+                                                    model.parts.remove(oldPart);
+                                                    model.parts.add(part);
+                                                    model.tableModel.changeParts(model.parts);
+                                                    if (model.tableModel.getRowCount() != 0)
+                                                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                                                    JOptionPane.showMessageDialog(dialog, "Part Successfully Updated!");
+                                                }
+                                            }
+                                            else if(model.parts.contains(part))
+                                            {
+                                                if(JOptionPane.showConfirmDialog(dialog, "This is already in the database already. Would you like to increase the quantity of the other part in the database instead?", "Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                                                {
+                                                    model.parts.remove(oldPart);
+                                                    model.parts.get(model.parts.indexOf(part)).quantity += part.quantity;
+                                                    model.tableModel.changeParts(model.parts);
+                                                    if (model.tableModel.getRowCount() != 0)
+                                                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                                                    JOptionPane.showMessageDialog(dialog, "Successfully Saved to Database!");
+                                                }
+                                                else
+                                                    JOptionPane.showMessageDialog(dialog, "Did Not Do Anything");
+                                            }
+                                            else
+                                            {
+                                                model.parts.remove(oldPart);
+                                                model.parts.add(part);
+                                                model.tableModel.changeParts(model.parts);
+                                                if (model.tableModel.getRowCount() != 0)
+                                                    model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                                                JOptionPane.showMessageDialog(dialog, "Part Successfully Updated!");
+                                            }
+                                        }
+                                        filter();
+                                        updatePanel[0] = update1;
+                                        panel.remove(currPanel[0]);
+                                        currPanel[0] = updatePanel[0];
+                                        panel.add(currPanel[0]);
+                                        panel.revalidate();
+                                        panel.repaint();
+                                    }
+                                });
+                                gbc.gridx = 1;
+                                gbc.gridy = 8;
+                                gbc.gridwidth = 2;
+                                updatePanel[0].add(updateButton, gbc);
+
                                 panel.revalidate();
                                 panel.repaint();
                             }
-                        });
+                        }
+                    });
+                    JScrollPane scrollPane = new JScrollPane(updateTable);
+                    scrollPane.setBackground(Color.decode("#92D050"));
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                    update1.add(scrollPane, BorderLayout.CENTER);
 
-                        delete.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                panel.remove(currPanel[0]);
-                                currPanel[0] = deletePanel;
-                                panel.add(currPanel[0], BorderLayout.CENTER);
-                                panel.revalidate();
-                                panel.repaint();
+                    JTextField searchBar = new JTextField();
+                    searchBar.getDocument().addDocumentListener(new DocumentListener() {
+                        @Override
+                        public void insertUpdate(DocumentEvent e) {
+                            filter();
+                        }
+
+                        @Override
+                        public void removeUpdate(DocumentEvent e) {
+                            filter();
+                        }
+
+                        @Override
+                        public void changedUpdate(DocumentEvent e) {
+                            filter();
+                        }
+
+                        private void filter()
+                        {
+                            ArrayList<Part> filtered = new ArrayList();
+                            String text = searchBar.getText().toUpperCase();
+                            for(Part part : model.parts)
+                            {
+                                boolean has = true;
+                                for (String input: text.split(" "))
+                                {
+                                    if (!part.toString().toUpperCase().contains(input))
+                                    {
+                                        has = false;
+                                        break;
+                                    }
+                                }
+                                if (has)
+                                    filtered.add(part);
                             }
-                        });
+                            model.tableModel.changeParts(filtered);
+                            if (model.tableModel.getRowCount() != 0)
+                                model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                            updateTable.revalidate();
+                        }
+                    });
+                    update1.add(searchBar, BorderLayout.NORTH);
+                    updatePanel[0] = update1;
 
-                        panel.add(addPanel, BorderLayout.CENTER);
+                    deletePanel = new JPanel(new BorderLayout());
+                    JTable deleteTable = new JTable(model.tableModel)
+                    {
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
+                        {
+                            Component c = super.prepareRenderer(renderer, row, column);
+                            JComponent jc = (JComponent)c;
+                            jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#92D050")));
+                            jc.setBackground(Color.decode("#385723"));
+                            jc.setForeground(Color.WHITE);
+                            jc.setFont(new Font("Verdana", Font.BOLD, 11));
+                            return c;
+                        }
+                    };
+                    deleteTable.setPreferredScrollableViewportSize(new Dimension(300, 750));
+                    deleteTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+                    deleteTable.getColumnModel().getColumn(1).setPreferredWidth(30);
+                    deleteTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+                    deleteTable.getColumnModel().getColumn(3).setPreferredWidth(8);
+                    deleteTable.getColumnModel().getColumn(4).setPreferredWidth(5);
+                    deleteTable.getColumnModel().getColumn(5).setPreferredWidth(10);
+                    deleteTable.getColumnModel().getColumn(6).setPreferredWidth(3);
+                    deleteTable.getColumnModel().getColumn(7).setPreferredWidth(10);
+                    for (int i = 0; i < deleteTable.getRowCount(); i ++)
+                        deleteTable.setRowHeight(i, 60);
+                    for (int i = 0; i < deleteTable.getColumnCount(); i ++)
+                        if(i != 6)
+                            deleteTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+                    deleteTable.addMouseListener(new MouseAdapter()
+                    {
+                        public void mouseClicked(MouseEvent me)
+                        {
+                            if (me.getClickCount() == 2)
+                            {
+                                JTable target = (JTable) me.getSource();
+                                int row = target.getSelectedRow();
+                                int choice = JOptionPane.showConfirmDialog(
+                                        null,
+                                        "Delete " + deleteTable.getValueAt(row,1) + " " + deleteTable.getValueAt(row,2) + "?",
+                                        "Delete Selected Item?",
+                                        JOptionPane.YES_NO_OPTION);
 
-                        dialog.setSize(800, 500);
-                        dialog.setLocationRelativeTo(view);
-                        dialog.setVisible(true);
-
-                        dialog.addWindowListener(new WindowAdapter() {
-                            @Override
-                            public void windowClosed(WindowEvent e) {
-                                view.account.setIcon(new ImageIcon("resources/regular.png"));
-                                model.isManager = false;
+                                if (choice == JOptionPane.YES_OPTION)
+                                {
+                                    Part part = new Part((String) deleteTable.getValueAt(row,0), (String) deleteTable.getValueAt(row,1), (String) deleteTable.getValueAt(row,2), (Integer) deleteTable.getValueAt(row,3), (Integer) deleteTable.getValueAt(row,4), (Double) deleteTable.getValueAt(row,5), (Boolean) deleteTable.getValueAt(row,6), (String) deleteTable.getValueAt(row,7));
+                                    model.parts.remove(part);
+                                    model.tableModel.changeParts(model.parts);
+                                    if (model.tableModel.getRowCount() != 0)
+                                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                                    JOptionPane.showMessageDialog(dialog, "Part Successfully Deleted From Database");
+                                }
+                                else
+                                    JOptionPane.showMessageDialog(dialog, "Part Was Not Deleted From Database");
                             }
-                        });
-                    }
-                    else
-                        JOptionPane.showMessageDialog(null, "Wrong Password Inputted. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
+
+                    scrollPane = new JScrollPane(deleteTable);
+                    scrollPane.setBackground(Color.decode("#92D050"));
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                    JTextField searchBar2 = new JTextField();
+                    searchBar2.getDocument().addDocumentListener(new DocumentListener() {
+                        @Override
+                        public void insertUpdate(DocumentEvent e) {
+                            filter();
+                        }
+
+                        @Override
+                        public void removeUpdate(DocumentEvent e) {
+                            filter();
+                        }
+
+                        @Override
+                        public void changedUpdate(DocumentEvent e) {
+                            filter();
+                        }
+
+                        private void filter()
+                        {
+                            ArrayList<Part> filtered = new ArrayList();
+                            String text = searchBar2.getText().toUpperCase();
+                            for(Part part : model.parts)
+                            {
+                                boolean has = true;
+                                for (String input: text.split(" "))
+                                {
+                                    if (!part.toString().toUpperCase().contains(input))
+                                    {
+                                        has = false;
+                                        break;
+                                    }
+                                }
+                                if (has)
+                                    filtered.add(part);
+                            }
+                            model.tableModel.changeParts(filtered);
+                            if (model.tableModel.getRowCount() != 0)
+                                model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                            deleteTable.revalidate();
+                        }
+                    });
+                    deletePanel.add(searchBar2, BorderLayout.NORTH);
+                    deletePanel.add(scrollPane, BorderLayout.CENTER);
+
+                    currPanel[0] = addPanel;
+                    panel.add(currPanel[0], BorderLayout.CENTER);
+
+                    add.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            panel.remove(currPanel[0]);
+                            currPanel[0] = addPanel;
+                            panel.add(currPanel[0], BorderLayout.CENTER); // Specify layout constraints
+                            panel.revalidate(); // Refresh layout
+                            panel.repaint(); // Repaint panel
+                        }
+                    });
+
+                    update.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            panel.remove(currPanel[0]);
+                            currPanel[0] = updatePanel[0];
+                            panel.add(currPanel[0], BorderLayout.CENTER);
+                            filter(searchBar, updateTable);
+                            panel.revalidate();
+                            panel.repaint();
+                        }
+                    });
+
+                    delete.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            panel.remove(currPanel[0]);
+                            currPanel[0] = deletePanel;
+                            panel.add(currPanel[0], BorderLayout.CENTER);
+                            filter(searchBar2, deleteTable);
+                            panel.revalidate();
+                            panel.repaint();
+                        }
+                    });
+
+                    panel.add(addPanel, BorderLayout.CENTER);
+
+                    dialog.setSize(800, 500);
+                    dialog.setLocationRelativeTo(view);
+                    dialog.setVisible(true);
+
+                    dialog.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            view.account.setIcon(new ImageIcon("resources/regular.png"));
+                        }
+                    });
                 }
                 else
-                {
-                    int choice = JOptionPane.showConfirmDialog(
-                            null,
-                            "Would you like to logout?",
-                            "Logout",
-                            JOptionPane.YES_NO_OPTION);
-                    if(choice == JOptionPane.YES_OPTION)
-                    {
-                        view.account.setIcon(new ImageIcon("resources/regular.png"));
-                        model.isManager = false;
-                    }
-                    else
-                        JOptionPane.showMessageDialog(null, "Did Not Logout.", "", JOptionPane.PLAIN_MESSAGE);
-                }
-                view.account.setEnabled(true);
+                    JOptionPane.showMessageDialog(null, "Wrong Password Inputted. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+
+                view.account.setIcon(new ImageIcon("resources/regular.png"));
             }
         });
 
@@ -1014,5 +1573,27 @@ public class Controller {
                 System.out.println("An error occurred.");
             }
         }
-
+    public void filter(JTextField searchBar, JTable table)
+    {
+        ArrayList<Part> filtered = new ArrayList();
+        String text = searchBar.getText().toUpperCase();
+        for(Part part : model.parts)
+        {
+            boolean has = true;
+            for (String input: text.split(" "))
+            {
+                if (!part.toString().toUpperCase().contains(input))
+                {
+                    has = false;
+                    break;
+                }
+            }
+            if (has)
+                filtered.add(part);
+        }
+        model.tableModel.changeParts(filtered);
+        if (model.tableModel.getRowCount() != 0)
+            model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+        table.revalidate();
     }
+}

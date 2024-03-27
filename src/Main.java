@@ -16,7 +16,6 @@ public class Main{
     ArrayList<Part> parts = new ArrayList<>();
     ArrayList<String> carBrands;
     PartTableModel tableModel;
-    boolean isManager = false;
     int currCart = 0;
     ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
 
@@ -82,22 +81,22 @@ public class Main{
         while(sheets.hasNext())
         {
             Sheet sheet = sheets.next();
-            model.carBrands.add(sheet.getSheetName());
+            model.carBrands.add(sheet.getSheetName().toUpperCase());
             Iterator<Row> iterator=sheet.iterator();
 
             while(iterator.hasNext()) {
                 Row nextRow = iterator.next();
                 Iterator<Cell> cellIterator=  nextRow.cellIterator();
 
-                String partBrand = cellIterator.next().getStringCellValue();
-                String name = cellIterator.next().getStringCellValue();
+                String partBrand = cellIterator.next().getStringCellValue().toUpperCase();
+                String name = cellIterator.next().getStringCellValue().toUpperCase();
                 int year = (int) cellIterator.next().getNumericCellValue();
                 int quantity = (int) cellIterator.next().getNumericCellValue();
                 double price = cellIterator.next().getNumericCellValue();
                 boolean isNew = "YES".equals(cellIterator.next().getStringCellValue());
-                String authenticity = cellIterator.next().getStringCellValue();
+                String authenticity = cellIterator.next().getStringCellValue().toUpperCase();
 
-                model.parts.add(new Part(sheet.getSheetName(), partBrand, name, year, quantity, price, isNew, authenticity));
+                model.parts.add(new Part(sheet.getSheetName().toUpperCase(), partBrand, name, year, quantity, price, isNew, authenticity));
             }
         }
 
