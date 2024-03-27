@@ -102,9 +102,13 @@ public class Frame extends JFrame {
                     panel.setPreferredSize(new Dimension(250,100));
                     JLabel label = new JLabel("Buy " + partTable.getValueAt(row,1) + " " + partTable.getValueAt(row,2) + "?");
                     label.setHorizontalAlignment(JLabel.CENTER);
+                    JTextField textField = new JTextField("1", 5);
+                    JPanel midPanel = new JPanel(new GridLayout(2,1));
                     JButton buyButton = new JButton("Add to Cart");
                     JButton cancelButton = new JButton("Cancel");
-                    panel.add(label, BorderLayout.CENTER);
+                    midPanel.add(label);
+                    midPanel.add(textField);
+                    panel.add(midPanel, BorderLayout.CENTER);
                     panelBot.add(buyButton, BorderLayout.WEST);
                     panelBot.add(cancelButton, BorderLayout.EAST);
                     panel.add(panelBot, BorderLayout.SOUTH);
@@ -118,7 +122,9 @@ public class Frame extends JFrame {
 
                     buyButton.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            Part part = new Part((String) partTable.getValueAt(row,0), (String) partTable.getValueAt(row,1), (String) partTable.getValueAt(row,2), (Integer) partTable.getValueAt(row,3), 1, (Double) partTable.getValueAt(row,5), (Boolean) partTable.getValueAt(row,6), (String) partTable.getValueAt(row,7));
+                            String text = textField.getText();
+                            int quantity = Integer.parseInt(text);
+                            Part part = new Part((String) partTable.getValueAt(row,0), (String) partTable.getValueAt(row,1), (String) partTable.getValueAt(row,2), (Integer) partTable.getValueAt(row,3), quantity, (Double) partTable.getValueAt(row,5), (Boolean) partTable.getValueAt(row,6), (String) partTable.getValueAt(row,7));
 
                             if (model.shoppingCarts.get(model.currCart).parts.contains(part))
                             {

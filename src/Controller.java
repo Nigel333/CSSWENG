@@ -598,44 +598,53 @@ public class Controller {
                         view.receiptList(part);
                         for (Part data: model.parts)
                             if(data.equals(part))
-                                data.quantity -= part.quantity;
+                                if(data.quantity >= part.quantity){
+                                    data.quantity -= part.quantity;
+                                    if(data.quantity == 0){
+                                        JOptionPane.showMessageDialog(view, data.name + " has run out, please resupply");
+                                        model.tableModel.changeParts(model.parts);
+                                        if (model.tableModel.getRowCount() != 0)
+                                            model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+
+                                        view.finalPrice.getText();
+                                        view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
+                                        view.cancelBackPanel.removeAll();
+                                        view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
+                                        view.displayScreen = view.receiptPanel;
+                                        view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                        view.rightDisplay.repaint();
+                                        view.rightDisplay.revalidate();
+
+                                        view.cart.setEnabled(false);
+                                        view.checkout.setEnabled(false);
+                                        view.payment.setEnabled(false);
+                                        view.receipt.setEnabled(true);
+                                    }
+                                } else{
+                                    JOptionPane.showMessageDialog(view, "Not enough " + data.name + " parts in store");
+                                    view.cartNum[model.currCart] = 0;
+                                    view.rightDisplay.remove(view.displayScreen);
+                                    view.cancelBackPanel.removeAll();
+                                    view.cancelBackPanel.add(view.cancelOrderButton);
+                                    view.cancelBackPanel.add(new JPanel());
+                                    view.cancelBackPanel.add(new JPanel());
+                                    view.cancelBackPanel.add(new JPanel());
+                                    view.cancelBackPanel.add(new JPanel());
+                                    view.cartPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+                                    view.displayScreen = view.cartPanel;
+                                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                    view.rightDisplay.repaint();
+                                    view.rightDisplay.revalidate();
+
+                                    view.cart.setEnabled(true);
+                                    view.checkout.setEnabled(false);
+                                    view.payment.setEnabled(false);
+                                    view.receipt.setEnabled(false);
+                                }
                     }
-                    model.tableModel.changeParts(model.parts);
-                    if (model.tableModel.getRowCount() != 0)
-                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
 
-                    view.finalPrice.getText();
-                    view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
-                    view.cancelBackPanel.removeAll();
-                    view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
-
-                    view.displayScreen = view.receiptPanel;
-                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                    view.rightDisplay.repaint();
-                    view.rightDisplay.revalidate();
-
-                    view.cart.setEnabled(false);
-                    view.checkout.setEnabled(false);
-                    view.payment.setEnabled(false);
-                    view.receipt.setEnabled(true);
                 }
-
-                view.receiptListTotal(view.sum);
-                view.cancelBackPanel.removeAll();
-                view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
-
-                view.displayScreen = view.receiptPanel;
-                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                view.rightDisplay.repaint();
-                view.rightDisplay.revalidate();
-
-                view.cart.setEnabled(false);
-                view.checkout.setEnabled(false);
-                view.payment.setEnabled(false);
-                view.receipt.setEnabled(true);
-
-                model.overwriteFile();
-
             }
         });
         view.printButton.addActionListener(new ActionListener() {
@@ -652,7 +661,8 @@ public class Controller {
                 }
                 */
                 CreateFile();
-                WriteToFile(view.receiptCtr, model.shoppingCarts.get(model.currCart).parts, view.sum);
+                WriteToFile(view.receiptCtr, model.shoppingCarts.get(model.currCart).parts, Double.parseDouble(view.finalPrice.getText()));
+                System.out.println(view.sum);
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
                 view.partPrices.clear();
@@ -703,7 +713,7 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 view.cartNum[model.currCart] = 0;
-                System.out.print("TESTING");
+                //System.out.print("TESTING");
                 view.rightDisplay.remove(view.displayScreen);
                 view.cancelBackPanel.removeAll();
                 view.cancelBackPanel.add(view.cancelOrderButton);
@@ -997,7 +1007,7 @@ public class Controller {
                     myWriter.write(part + "\n");
                 }
                 myWriter.write("---------------------------------------------------------------------\n");
-                myWriter.write("Total: " + total);
+                myWriter.write("Total: P" + total);
                 myWriter.close();
                 System.out.println("Successfully wrote to the file.");
             } catch (IOException e) {
