@@ -422,6 +422,18 @@ public class Controller {
                                     if (model.tableModel.getRowCount() != 0)
                                         model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
                                     JOptionPane.showMessageDialog(dialog, "Part Successfully Added to Database!");
+
+                                    if(!model.carBrands.contains(part.carBrand))
+                                    {
+                                        model.carBrands.add(part.carBrand);
+                                        view.brandFilter.addItem(part.carBrand);
+                                    }
+                                    boolean exists = false;
+                                    for(int i = 0; i < view.modelFilter.getItemCount(); i++)
+                                        if(view.modelFilter.getItemAt(i).equals(part.carModel))
+                                            exists = true;
+                                    if(!exists)
+                                        view.modelFilter.addItem(part.carModel);
                                 }
                             }
                             filter();
@@ -734,6 +746,18 @@ public class Controller {
                                                     model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
                                                 JOptionPane.showMessageDialog(dialog, "Part Successfully Updated!");
                                             }
+                                            if(!model.carBrands.contains(part.carBrand))
+                                            {
+                                                model.carBrands.add(part.carBrand);
+                                                view.brandFilter.addItem(part.carBrand);
+                                            }
+                                            boolean exists = false;
+                                            for(int i = 0; i < view.modelFilter.getItemCount(); i++)
+                                                if(view.modelFilter.getItemAt(i).equals(part.carModel))
+                                                    exists = true;
+                                            if(!exists)
+                                                view.modelFilter.addItem(part.carModel);
+
                                         }
                                         filter();
                                         updatePanel[0] = update1;
