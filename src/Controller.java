@@ -179,12 +179,12 @@ public class Controller {
         this.view.account.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String password = "";
                 Object[] option = {"Enter"};
                 JPasswordField passwordField = new JPasswordField();
-                if(JOptionPane.showOptionDialog(null, passwordField, "Please Enter the Password", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]) == 0)
-                    password = passwordField.getText();
-                if(password.equals("password"))
+                boolean exited = false;
+                if(JOptionPane.showOptionDialog(null, passwordField, "Please Enter the Password", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]) == JOptionPane.CLOSED_OPTION)
+                    exited = true;
+                if(!exited && passwordField.getText().equals("password"))
                 {
                     view.account.setIcon(new ImageIcon("resources/manager.png"));
 
@@ -984,7 +984,7 @@ public class Controller {
                         }
                     });
                 }
-                else
+                else if (!exited)
                     JOptionPane.showMessageDialog(null, "Wrong Password Inputted. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
 
                 view.account.setIcon(new ImageIcon("resources/regular.png"));
@@ -1007,49 +1007,49 @@ public class Controller {
 
                     switch(view.cartNum[model.currCart]){
                         case 0: view.rightDisplay.remove(view.displayScreen);
-                                view.displayScreen = view.cartPanel;
-                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                                view.rightDisplay.repaint();
-                                view.rightDisplay.revalidate();
+                            view.displayScreen = view.cartPanel;
+                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                            view.rightDisplay.repaint();
+                            view.rightDisplay.revalidate();
 
-                                view.cart.setEnabled(true);
-                                view.checkout.setEnabled(false);
-                                view.payment.setEnabled(false);
-                                view.receipt.setEnabled(false);
-                                break;
+                            view.cart.setEnabled(true);
+                            view.checkout.setEnabled(false);
+                            view.payment.setEnabled(false);
+                            view.receipt.setEnabled(false);
+                            break;
                         case 1: view.rightDisplay.remove(view.displayScreen);
-                                view.displayScreen = view.checkoutPanel;
-                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                                view.rightDisplay.repaint();
-                                view.rightDisplay.revalidate();
+                            view.displayScreen = view.checkoutPanel;
+                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                            view.rightDisplay.repaint();
+                            view.rightDisplay.revalidate();
 
-                                view.cart.setEnabled(false);
-                                view.checkout.setEnabled(true);
-                                view.payment.setEnabled(false);
-                                view.receipt.setEnabled(false);
-                                break;
+                            view.cart.setEnabled(false);
+                            view.checkout.setEnabled(true);
+                            view.payment.setEnabled(false);
+                            view.receipt.setEnabled(false);
+                            break;
                         case 2: view.rightDisplay.remove(view.displayScreen);
-                                view.displayScreen = view.paymentPanel;
-                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                                view.rightDisplay.repaint();
-                                view.rightDisplay.revalidate();
+                            view.displayScreen = view.paymentPanel;
+                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                            view.rightDisplay.repaint();
+                            view.rightDisplay.revalidate();
 
-                                view.cart.setEnabled(false);
-                                view.checkout.setEnabled(false);
-                                view.payment.setEnabled(true);
-                                view.receipt.setEnabled(false);
-                                break;
+                            view.cart.setEnabled(false);
+                            view.checkout.setEnabled(false);
+                            view.payment.setEnabled(true);
+                            view.receipt.setEnabled(false);
+                            break;
                         case 3: view.rightDisplay.remove(view.displayScreen);
-                                view.displayScreen = view.receiptPanel;
-                                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                                view.rightDisplay.repaint();
-                                view.rightDisplay.revalidate();
+                            view.displayScreen = view.receiptPanel;
+                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                            view.rightDisplay.repaint();
+                            view.rightDisplay.revalidate();
 
-                                view.cart.setEnabled(false);
-                                view.checkout.setEnabled(false);
-                                view.payment.setEnabled(false);
-                                view.receipt.setEnabled(true);
-                                break;
+                            view.cart.setEnabled(false);
+                            view.checkout.setEnabled(false);
+                            view.payment.setEnabled(false);
+                            view.receipt.setEnabled(true);
+                            break;
                     }
 
                 }
@@ -1060,42 +1060,45 @@ public class Controller {
         view.proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.cartNum[model.currCart] = 1;
-                view.rightDisplay.remove(view.displayScreen);
-                view.checkoutView.removeAll();
-                view.checkoutView.repaint();
-                view.checkoutView.revalidate();
-                for (Part part : model.shoppingCarts.get(model.currCart).parts) {
-                    view.checkoutList(part);
-                }
-                view.cancelBackPanel.removeAll();
-                java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
-                if (imageURL != null) {
-                    ImageIcon originalIcon = new ImageIcon(imageURL);
-                    Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-                    view.backButtonChk.setIcon(new ImageIcon(scaledImage));
-                } else {
-                    //System.err.println("Error: Unable to load back button icon");
-                    view.backButtonChk.setText("Back");
-                    view.backButtonChk.setFont(new Font("Verdana", Font.BOLD, 11));
-                }
-                view.cancelBackPanel.add(view.backButtonChk);
-                view.cancelBackPanel.add(new JPanel());
-                view.cancelBackPanel.add(new JPanel());
-                view.cancelBackPanel.add(new JPanel());
-                view.cancelBackPanel.add(new JPanel());
-                view.checkoutPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+                if (model.shoppingCarts.get(model.currCart).parts.size() != 0) {
+                    view.cartNum[model.currCart] = 1;
+                    view.rightDisplay.remove(view.displayScreen);
+                    view.checkoutView.removeAll();
+                    view.checkoutView.repaint();
+                    view.checkoutView.revalidate();
+                    for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                        view.checkoutList(part);
+                    }
+                    view.cancelBackPanel.removeAll();
+                    java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
+                    if (imageURL != null) {
+                        ImageIcon originalIcon = new ImageIcon(imageURL);
+                        Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                        view.backButtonChk.setIcon(new ImageIcon(scaledImage));
+                    } else {
+                        //System.err.println("Error: Unable to load back button icon");
+                        view.backButtonChk.setText("Back");
+                        view.backButtonChk.setFont(new Font("Verdana", Font.BOLD, 11));
+                    }
+                    view.cancelBackPanel.add(view.backButtonChk);
+                    view.cancelBackPanel.add(new JPanel());
+                    view.cancelBackPanel.add(new JPanel());
+                    view.cancelBackPanel.add(new JPanel());
+                    view.cancelBackPanel.add(new JPanel());
+                    view.checkoutPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
 
-                view.displayScreen = view.checkoutPanel;
-                view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                view.rightDisplay.repaint();
-                view.rightDisplay.revalidate();
+                    view.displayScreen = view.checkoutPanel;
+                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                    view.rightDisplay.repaint();
+                    view.rightDisplay.revalidate();
 
-                view.cart.setEnabled(false);
-                view.checkout.setEnabled(true);
-                view.payment.setEnabled(false);
-                view.receipt.setEnabled(false);
+                    view.cart.setEnabled(false);
+                    view.checkout.setEnabled(true);
+                    view.payment.setEnabled(false);
+                    view.receipt.setEnabled(false);
+                } else
+                    JOptionPane.showMessageDialog(null, "The cart is empty. Please fill it up first!");
             }
         });
         view.proceed2PayButton.addActionListener(new ActionListener() {
@@ -1110,7 +1113,6 @@ public class Controller {
                     view.paymentList(part);
                     view.partPrices.add(part.price);
                 }
-                System.out.println("1st sum : "+ view.sum);
                 double tempPrice = 0;
                 for (Double price : view.partPrices) {
                     tempPrice += price;
@@ -1182,28 +1184,27 @@ public class Controller {
                         for (Part data: model.parts)
                             if(data.equals(part))
                                 if(data.quantity >= part.quantity){
-                                    data.quantity -= part.quantity;
-                                    if(data.quantity == 0){
+                                    if(data.quantity == 0)
                                         JOptionPane.showMessageDialog(view, data.name + " has run out, please resupply");
-                                        model.tableModel.changeParts(model.parts);
-                                        if (model.tableModel.getRowCount() != 0)
-                                            model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+                                    data.quantity -= part.quantity;
+                                    model.tableModel.changeParts(model.parts);
+                                    if (model.tableModel.getRowCount() != 0)
+                                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
 
-                                        view.finalPrice.getText();
-                                        view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
-                                        view.cancelBackPanel.removeAll();
-                                        view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+                                    view.finalPrice.getText();
+                                    view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
+                                    view.cancelBackPanel.removeAll();
+                                    view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
-                                        view.displayScreen = view.receiptPanel;
-                                        view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                                        view.rightDisplay.repaint();
-                                        view.rightDisplay.revalidate();
+                                    view.displayScreen = view.receiptPanel;
+                                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                    view.rightDisplay.repaint();
+                                    view.rightDisplay.revalidate();
 
-                                        view.cart.setEnabled(false);
-                                        view.checkout.setEnabled(false);
-                                        view.payment.setEnabled(false);
-                                        view.receipt.setEnabled(true);
-                                    }
+                                    view.cart.setEnabled(false);
+                                    view.checkout.setEnabled(false);
+                                    view.payment.setEnabled(false);
+                                    view.receipt.setEnabled(true);
                                 } else{
                                     JOptionPane.showMessageDialog(view, "Not enough " + data.name + " parts in store");
                                     view.cartNum[model.currCart] = 0;
@@ -1470,14 +1471,14 @@ public class Controller {
 
             if ((!this.view.fromPrice.getText().isEmpty()) && this.view.fromPrice.getBackground().equals(Color.WHITE))
             {
-                    double price = Double.parseDouble(this.view.fromPrice.getText());
-                    ArrayList<Part> filterOut = new ArrayList();
-                    for (Part part : filtered)
-                    {
-                        if (part.price < price)
-                            filterOut.add(part);
-                    }
-                    filtered.removeAll(filterOut);
+                double price = Double.parseDouble(this.view.fromPrice.getText());
+                ArrayList<Part> filterOut = new ArrayList();
+                for (Part part : filtered)
+                {
+                    if (part.price < price)
+                        filterOut.add(part);
+                }
+                filtered.removeAll(filterOut);
             }
 
             if ((!this.view.toPrice.getText().isEmpty()) && this.view.toPrice.getBackground().equals(Color.WHITE))
@@ -1504,8 +1505,8 @@ public class Controller {
                             filterOut.add(part);
                     }
                     else
-                        if(part.isNew != false)
-                            filterOut.add(part);
+                    if(part.isNew != false)
+                        filterOut.add(part);
                 }
                 filtered.removeAll(filterOut);
             }
@@ -1583,20 +1584,20 @@ public class Controller {
         }
     }
     public void WriteToFile(int fileNum,ArrayList<Part> parts, double total ) {
-            try {
-                FileWriter myWriter = new FileWriter("./Receipts/" + view.date + "/" +  (fileNum-1) + ".txt");
-                myWriter.write("---------------------------------------------------------------------\n");
-                for(Part part : parts){
-                    myWriter.write(part + "\n");
-                }
-                myWriter.write("---------------------------------------------------------------------\n");
-                myWriter.write("Total: P" + total);
-                myWriter.close();
-                System.out.println("Successfully wrote to the file.");
-            } catch (IOException e) {
-                System.out.println("An error occurred.");
+        try {
+            FileWriter myWriter = new FileWriter("./Receipts/" + view.date + "/" +  (fileNum-1) + ".txt");
+            myWriter.write("---------------------------------------------------------------------\n");
+            for(Part part : parts){
+                myWriter.write(part + "\n");
             }
+            myWriter.write("---------------------------------------------------------------------\n");
+            myWriter.write("Total: P" + total);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
         }
+    }
     public void filter(JTextField searchBar, JTable table)
     {
         ArrayList<Part> filtered = new ArrayList();

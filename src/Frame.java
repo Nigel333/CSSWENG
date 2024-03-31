@@ -93,76 +93,72 @@ public class Frame extends JFrame {
         partTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
                 if (me.getClickCount() == 2) {
-                    JTable target = (JTable) me.getSource();
-                    int row = target.getSelectedRow();
-                    JPanel panel = new JPanel();
-                    JPanel panelBot = new JPanel();
-                    panel.setLayout(new BorderLayout());
-                    panel.setPreferredSize(new Dimension(250,100));
-                    JLabel label = new JLabel("Buy " + partTable.getValueAt(row,1) + " " + partTable.getValueAt(row,2) + "?");
-                    label.setHorizontalAlignment(JLabel.CENTER);
-                    JTextField textField = new JTextField("1", 5);
-                    JPanel midPanel = new JPanel(new GridLayout(2,1));
-                    JButton buyButton = new JButton("Add to Cart");
-                    JButton cancelButton = new JButton("Cancel");
-                    midPanel.add(label);
-                    midPanel.add(textField);
-                    panel.add(midPanel, BorderLayout.CENTER);
-                    panelBot.add(buyButton, BorderLayout.WEST);
-                    panelBot.add(cancelButton, BorderLayout.EAST);
-                    panel.add(panelBot, BorderLayout.SOUTH);
+                    if(cartNum[model.currCart] == 0) {
+                        JTable target = (JTable) me.getSource();
+                        int row = target.getSelectedRow();
+                        JPanel panel = new JPanel();
+                        JPanel panelBot = new JPanel();
+                        panel.setLayout(new BorderLayout());
+                        panel.setPreferredSize(new Dimension(250, 100));
+                        JLabel label = new JLabel("Buy " + partTable.getValueAt(row, 1) + " " + partTable.getValueAt(row, 2) + "?");
+                        label.setHorizontalAlignment(JLabel.CENTER);
+                        JTextField textField = new JTextField("1", 5);
+                        JPanel midPanel = new JPanel(new GridLayout(2, 1));
+                        JButton buyButton = new JButton("Add to Cart");
+                        JButton cancelButton = new JButton("Cancel");
+                        midPanel.add(label);
+                        midPanel.add(textField);
+                        panel.add(midPanel, BorderLayout.CENTER);
+                        panelBot.add(buyButton, BorderLayout.WEST);
+                        panelBot.add(cancelButton, BorderLayout.EAST);
+                        panel.add(panelBot, BorderLayout.SOUTH);
 
-                    JDialog dialog = new JDialog();
-                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                    dialog.getContentPane().add(panel);
-                    dialog.pack();
-                    dialog.setLocationRelativeTo(null);
-                    dialog.setVisible(true);
+                        JDialog dialog = new JDialog();
+                        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                        dialog.getContentPane().add(panel);
+                        dialog.pack();
+                        dialog.setLocationRelativeTo(null);
+                        dialog.setVisible(true);
 
-                    buyButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            String text = textField.getText();
-                            int quantity = Integer.parseInt(text);
-                            Part part = new Part((String) partTable.getValueAt(row,0), (String) partTable.getValueAt(row,1), (String) partTable.getValueAt(row,2), (Integer) partTable.getValueAt(row,3), quantity, (Double) partTable.getValueAt(row,5), (Boolean) partTable.getValueAt(row,6), (String) partTable.getValueAt(row,7));
+                        buyButton.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                String text = textField.getText();
+                                int quantity = Integer.parseInt(text);
+                                Part part = new Part((String) partTable.getValueAt(row, 0), (String) partTable.getValueAt(row, 1), (String) partTable.getValueAt(row, 2), (Integer) partTable.getValueAt(row, 3), quantity, (Double) partTable.getValueAt(row, 5), (Boolean) partTable.getValueAt(row, 6), (String) partTable.getValueAt(row, 7));
 
-                            if (model.shoppingCarts.get(model.currCart).parts.contains(part))
-                            {
-                                int choice = JOptionPane.showConfirmDialog(null, "This is already in the current shopping cart. Would you like to increase the amount of the parts in the shopping cart instead?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                                if (model.shoppingCarts.get(model.currCart).parts.contains(part)) {
+                                    int choice = JOptionPane.showConfirmDialog(null, "This is already in the current shopping cart. Would you like to increase the amount of the parts in the shopping cart instead?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
-                                if (choice == JOptionPane.YES_OPTION)
-                                {
-                                    model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity++;
-                                    part = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part));
-                                    for (PartLabel label: listsOfParts.get(model.currCart))
-                                    {
-                                        if (label.part.equals(part))
-                                        {
-                                            label.update(part);
-                                            break;
+                                    if (choice == JOptionPane.YES_OPTION) {
+                                        model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity++;
+                                        part = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part));
+                                        for (PartLabel label : listsOfParts.get(model.currCart)) {
+                                            if (label.part.equals(part)) {
+                                                label.update(part);
+                                                break;
+                                            }
                                         }
+                                        JOptionPane.showMessageDialog(null, "Increased the amount");
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "Did not increase the amount");
                                     }
-                                    JOptionPane.showMessageDialog(null, "Increased the amount");
+                                } else {
+                                    JOptionPane.showMessageDialog(dialog, "Added to Cart!");
+                                    model.shoppingCarts.get(model.currCart).parts.add(part);
+                                    addToCart(model.currCart, part);
                                 }
-                                else
-                                {
-                                    JOptionPane.showMessageDialog(null, "Did not increase the amount");
-                                }
+                                dialog.dispose();
                             }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(dialog, "Added to Cart!");
-                                model.shoppingCarts.get(model.currCart).parts.add(part);
-                                addToCart(model.currCart, part);
-                            }
-                            dialog.dispose();
-                        }
-                    });
+                        });
 
-                    cancelButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            dialog.dispose();
-                        }
-                    });
+                        cancelButton.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                dialog.dispose();
+                            }
+                        });
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null, "Not in cart step. Please go back.");
                 }
             }
         });
