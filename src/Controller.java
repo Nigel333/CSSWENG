@@ -1184,9 +1184,10 @@ public class Controller {
                         for (Part data: model.parts)
                             if(data.equals(part))
                                 if(data.quantity >= part.quantity){
-                                    if(data.quantity == 0)
-                                        JOptionPane.showMessageDialog(view, data.name + " has run out, please resupply");
                                     data.quantity -= part.quantity;
+                                    if(data.quantity == 0) {
+                                        JOptionPane.showMessageDialog(view, data.name + " has run out, please resupply");
+                                    }
                                     model.tableModel.changeParts(model.parts);
                                     if (model.tableModel.getRowCount() != 0)
                                         model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
@@ -1205,26 +1206,6 @@ public class Controller {
                                     view.checkout.setEnabled(false);
                                     view.payment.setEnabled(false);
                                     view.receipt.setEnabled(true);
-                                } else{
-                                    JOptionPane.showMessageDialog(view, "Not enough " + data.name + " parts in store");
-                                    view.cartNum[model.currCart] = 0;
-                                    view.rightDisplay.remove(view.displayScreen);
-                                    view.cancelBackPanel.removeAll();
-                                    view.cancelBackPanel.add(view.cancelOrderButton);
-                                    view.cancelBackPanel.add(new JPanel());
-                                    view.cancelBackPanel.add(new JPanel());
-                                    view.cancelBackPanel.add(new JPanel());
-                                    view.cancelBackPanel.add(new JPanel());
-                                    view.cartPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
-                                    view.displayScreen = view.cartPanel;
-                                    view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                                    view.rightDisplay.repaint();
-                                    view.rightDisplay.revalidate();
-
-                                    view.cart.setEnabled(true);
-                                    view.checkout.setEnabled(false);
-                                    view.payment.setEnabled(false);
-                                    view.receipt.setEnabled(false);
                                 }
                     }
 

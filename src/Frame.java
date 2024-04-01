@@ -124,28 +124,29 @@ public class Frame extends JFrame {
                             public void actionPerformed(ActionEvent e) {
                                 String text = textField.getText();
                                 int quantity = Integer.parseInt(text);
-                                Part part = new Part((String) partTable.getValueAt(row, 0), (String) partTable.getValueAt(row, 1), (String) partTable.getValueAt(row, 2), (Integer) partTable.getValueAt(row, 3), quantity, (Double) partTable.getValueAt(row, 5), (Boolean) partTable.getValueAt(row, 6), (String) partTable.getValueAt(row, 7));
+                                if(quantity > (Integer) partTable.getValueAt(row,4)){
+                                    JOptionPane.showMessageDialog(null, "Not enough " + partTable.getValueAt(row, 2) + " parts in store");
+                                } else{
+                                    Part part = new Part((String) partTable.getValueAt(row, 0), (String) partTable.getValueAt(row, 1), (String) partTable.getValueAt(row, 2), (Integer) partTable.getValueAt(row, 3), quantity, (Double) partTable.getValueAt(row, 5), (Boolean) partTable.getValueAt(row, 6), (String) partTable.getValueAt(row, 7));
+                                    if (model.shoppingCarts.get(model.currCart).parts.contains(part)) {
+                                        int choice = JOptionPane.showConfirmDialog(null, "This is already in the current shopping cart. Would you like to increase the amount of the parts in the shopping cart instead?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
-                                if (model.shoppingCarts.get(model.currCart).parts.contains(part)) {
-                                    int choice = JOptionPane.showConfirmDialog(null, "This is already in the current shopping cart. Would you like to increase the amount of the parts in the shopping cart instead?", "Confirmation", JOptionPane.YES_NO_OPTION);
-
-                                    if (choice == JOptionPane.YES_OPTION) {
-                                        model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity++;
-                                        part = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part));
-                                        for (PartLabel label : listsOfParts.get(model.currCart)) {
-                                            if (label.part.equals(part)) {
-                                                label.update(part);
-                                                break;
+                                        if (choice == JOptionPane.YES_OPTION) {
+                                            model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity += quantity;
+                                            part = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part));
+                                            for (PartLabel label : listsOfParts.get(model.currCart)) {
+                                                if (label.part.equals(part)) {
+                                                    label.update(part);
+                                                    break;
+                                                }
                                             }
                                         }
-                                        JOptionPane.showMessageDialog(null, "Increased the amount");
-                                    } else {
-                                        JOptionPane.showMessageDialog(null, "Did not increase the amount");
                                     }
-                                } else {
-                                    JOptionPane.showMessageDialog(dialog, "Added to Cart!");
-                                    model.shoppingCarts.get(model.currCart).parts.add(part);
-                                    addToCart(model.currCart, part);
+                                    else {
+                                        JOptionPane.showMessageDialog(dialog, "Added to Cart!");
+                                        model.shoppingCarts.get(model.currCart).parts.add(part);
+                                        addToCart(model.currCart, part);
+                                    }
                                 }
                                 dialog.dispose();
                             }

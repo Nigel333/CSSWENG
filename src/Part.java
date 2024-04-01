@@ -21,6 +21,7 @@ public class Part{
         this.authenticity = authenticity;
     }
 
+
     @Override
     public boolean equals(Object o)
     {
