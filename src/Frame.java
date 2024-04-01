@@ -132,14 +132,21 @@ public class Frame extends JFrame {
                                         int choice = JOptionPane.showConfirmDialog(null, "This is already in the current shopping cart. Would you like to increase the amount of the parts in the shopping cart instead?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
                                         if (choice == JOptionPane.YES_OPTION) {
-                                            model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity += quantity;
-                                            part = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part));
-                                            for (PartLabel label : listsOfParts.get(model.currCart)) {
-                                                if (label.part.equals(part)) {
-                                                    label.update(part);
-                                                    break;
+                                            int temp = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity + quantity;
+                                            if(temp  > (Integer) partTable.getValueAt(row,4)){
+                                                JOptionPane.showMessageDialog(null, "Not enough " + partTable.getValueAt(row, 2) + " parts in store");
+
+                                            } else{
+                                                model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part)).quantity += quantity;
+                                                part = model.shoppingCarts.get(model.currCart).parts.get(model.shoppingCarts.get(model.currCart).parts.indexOf(part));
+                                                for (PartLabel label : listsOfParts.get(model.currCart)) {
+                                                    if (label.part.equals(part)) {
+                                                        label.update(part);
+                                                        break;
+                                                    }
                                                 }
                                             }
+
                                         }
                                     }
                                     else {
