@@ -1007,6 +1007,13 @@ public class Controller {
 
                     switch(view.cartNum[model.currCart]){
                         case 0: view.rightDisplay.remove(view.displayScreen);
+                            view.cancelBackPanel.removeAll();
+                            view.cancelBackPanel.add(view.cancelOrderButton);
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cartPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
                             view.displayScreen = view.cartPanel;
                             view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                             view.rightDisplay.repaint();
@@ -1018,6 +1025,31 @@ public class Controller {
                             view.receipt.setEnabled(false);
                             break;
                         case 1: view.rightDisplay.remove(view.displayScreen);
+                            view.checkoutView.removeAll();
+                            view.checkoutView.repaint();
+                            view.checkoutView.revalidate();
+                            for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                                view.checkoutList(part);
+                            }
+                            view.cancelBackPanel.removeAll();
+                            java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
+                            if (imageURL != null) {
+                                ImageIcon originalIcon = new ImageIcon(imageURL);
+                                Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                                view.backButtonChk.setIcon(new ImageIcon(scaledImage));
+                            } else {
+                                //System.err.println("Error: Unable to load back button icon");
+                                view.backButtonChk.setText("Back");
+                                view.backButtonChk.setFont(new Font("Verdana", Font.BOLD, 11));
+                            }
+                            view.cancelBackPanel.add(view.backButtonChk);
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.checkoutPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
+
                             view.displayScreen = view.checkoutPanel;
                             view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                             view.rightDisplay.repaint();
@@ -1044,7 +1076,7 @@ public class Controller {
                             view.sum[model.currCart] = tempPrice;
                             view.finalPrice.setText(Double.toString(view.sum[model.currCart]));
                             view.cancelBackPanel.removeAll();
-                            java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
+                            imageURL = getClass().getClassLoader().getResource("images/back_button.png");
                             if (imageURL != null) {
                                 ImageIcon originalIcon = new ImageIcon(imageURL);
                                 Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
