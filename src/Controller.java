@@ -188,6 +188,21 @@ public class Controller {
                 {
                     view.account.setIcon(new ImageIcon("resources/manager.png"));
 
+                    view.searchField.setText("");
+                    view.sortBy.setSelectedIndex(0);
+                    view.order.setSelectedIndex(0);
+                    view.brandFilter.setSelectedIndex(0);
+                    view.newFilter.setSelectedIndex(0);
+                    view.authenticityFilter.setSelectedIndex(0);
+                    view.fromYear.setText("");
+                    view.toYear.setText("");
+                    view.fromPrice.setText("");
+                    view.toPrice.setText("");
+
+                    model.tableModel.changeParts(model.parts);
+                    if (model.tableModel.getRowCount() != 0)
+                        model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
+
                     JDialog dialog = new JDialog(view, "Manager Settings", true);
                     JPanel panel = new JPanel(new BorderLayout());
                     panel.setBackground(Color.ORANGE);
@@ -1007,6 +1022,13 @@ public class Controller {
 
                     switch(view.cartNum[model.currCart]){
                         case 0: view.rightDisplay.remove(view.displayScreen);
+                            view.cancelBackPanel.removeAll();
+                            view.cancelBackPanel.add(view.cancelOrderButton);
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cartPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
                             view.displayScreen = view.cartPanel;
                             view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                             view.rightDisplay.repaint();
@@ -1018,6 +1040,31 @@ public class Controller {
                             view.receipt.setEnabled(false);
                             break;
                         case 1: view.rightDisplay.remove(view.displayScreen);
+                            view.checkoutView.removeAll();
+                            view.checkoutView.repaint();
+                            view.checkoutView.revalidate();
+                            for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                                view.checkoutList(part);
+                            }
+                            view.cancelBackPanel.removeAll();
+                            java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
+                            if (imageURL != null) {
+                                ImageIcon originalIcon = new ImageIcon(imageURL);
+                                Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                                view.backButtonChk.setIcon(new ImageIcon(scaledImage));
+                            } else {
+                                //System.err.println("Error: Unable to load back button icon");
+                                view.backButtonChk.setText("Back");
+                                view.backButtonChk.setFont(new Font("Verdana", Font.BOLD, 11));
+                            }
+                            view.cancelBackPanel.add(view.backButtonChk);
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.checkoutPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
+
                             view.displayScreen = view.checkoutPanel;
                             view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                             view.rightDisplay.repaint();
@@ -1029,6 +1076,37 @@ public class Controller {
                             view.receipt.setEnabled(false);
                             break;
                         case 2: view.rightDisplay.remove(view.displayScreen);
+                            view.paymentView.removeAll();
+                            view.paymentView.repaint();
+                            view.paymentView.revalidate();
+                            view.partPrices.clear();
+                            double tempPrice = 0;
+                            for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                                view.paymentList(part);
+                                view.partPrices.add(part.price);
+                                tempPrice += part.price * part.quantity;
+                            }
+
+                            view.sum[model.currCart] = tempPrice;
+                            view.finalPrice.setText(String.valueOf(tempPrice));
+                            view.cancelBackPanel.removeAll();
+                            imageURL = getClass().getClassLoader().getResource("images/back_button.png");
+                            if (imageURL != null) {
+                                ImageIcon originalIcon = new ImageIcon(imageURL);
+                                Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                                view.backButtonPay.setIcon(new ImageIcon(scaledImage));
+                            } else {
+                                //System.err.println("Error: Unable to load back button icon");
+                                view.backButtonPay.setText("Back");
+                                view.backButtonPay.setFont(new Font("Verdana", Font.BOLD, 11));
+                            }
+                            view.cancelBackPanel.add(view.backButtonPay);
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.paymentPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
                             view.displayScreen = view.paymentPanel;
                             view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                             view.rightDisplay.repaint();
@@ -1040,15 +1118,30 @@ public class Controller {
                             view.receipt.setEnabled(false);
                             break;
                         case 3: view.rightDisplay.remove(view.displayScreen);
-                            view.displayScreen = view.receiptPanel;
-                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                            view.rightDisplay.repaint();
-                            view.rightDisplay.revalidate();
+                            view.receiptView.removeAll();
+                            view.receiptView.repaint();
+                            view.receiptView.revalidate();
+                            for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                                view.receiptList(part);
+                                for (Part data: model.parts)
+                                    if(data.equals(part)){
+                                        view.finalPrice.getText();
 
-                            view.cart.setEnabled(false);
-                            view.checkout.setEnabled(false);
-                            view.payment.setEnabled(false);
-                            view.receipt.setEnabled(true);
+                                        view.cancelBackPanel.removeAll();
+                                        view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
+                                        view.displayScreen = view.receiptPanel;
+                                        view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                        view.rightDisplay.repaint();
+                                        view.rightDisplay.revalidate();
+
+                                        view.cart.setEnabled(false);
+                                        view.checkout.setEnabled(false);
+                                        view.payment.setEnabled(false);
+                                        view.receipt.setEnabled(true);
+                                    }
+                            }
+                            view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
                             break;
                     }
 
@@ -1109,15 +1202,15 @@ public class Controller {
                 view.paymentView.removeAll();
                 view.paymentView.repaint();
                 view.paymentView.revalidate();
+                view.partPrices.clear();
+                double tempPrice = 0;
                 for (Part part : model.shoppingCarts.get(model.currCart).parts) {
                     view.paymentList(part);
                     view.partPrices.add(part.price);
+                    tempPrice += part.price * part.quantity;
                 }
-                double tempPrice = 0;
-                for (Double price : view.partPrices) {
-                    tempPrice += price;
-                }
-                view.finalPrice.setText(Double.toString(tempPrice));
+                view.sum[model.currCart] = tempPrice;
+                view.finalPrice.setText(String.valueOf(tempPrice));
                 view.cancelBackPanel.removeAll();
                 java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
                 if (imageURL != null) {
@@ -1193,7 +1286,7 @@ public class Controller {
                                         model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
 
                                     view.finalPrice.getText();
-                                    view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
+
                                     view.cancelBackPanel.removeAll();
                                     view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
@@ -1208,8 +1301,7 @@ public class Controller {
                                     view.receipt.setEnabled(true);
                                 }
                     }
-
-                }
+                    view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);                }
             }
         });
         view.printButton.addActionListener(new ActionListener() {
@@ -1227,7 +1319,7 @@ public class Controller {
                 */
                 CreateFile();
                 WriteToFile(view.receiptCtr, model.shoppingCarts.get(model.currCart).parts, Double.parseDouble(view.finalPrice.getText()));
-                System.out.println(view.sum);
+
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
                 view.partPrices.clear();
@@ -1302,6 +1394,7 @@ public class Controller {
         view.backButtonPay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.partPrices.clear();
                 view.cartNum[model.currCart] = 1;
                 System.out.print("TESTING");
                 view.rightDisplay.remove(view.displayScreen);
