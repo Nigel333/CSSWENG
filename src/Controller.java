@@ -1112,14 +1112,7 @@ public class Controller {
                                 for (Part data: model.parts)
                                     if(data.equals(part))
                                         if(data.quantity >= part.quantity){
-                                            data.quantity -= part.quantity;
-                                            if(data.quantity == 0) {
-                                                JOptionPane.showMessageDialog(view, data.name + " has run out, please resupply");
-                                            }
-                                            model.tableModel.changeParts(model.parts);
-                                            if (model.tableModel.getRowCount() != 0)
-                                                model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
-
+                                            
                                             view.finalPrice.getText();
 
                                             view.cancelBackPanel.removeAll();
