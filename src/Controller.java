@@ -1029,6 +1029,38 @@ public class Controller {
                             view.receipt.setEnabled(false);
                             break;
                         case 2: view.rightDisplay.remove(view.displayScreen);
+                            view.paymentView.removeAll();
+                            view.paymentView.repaint();
+                            view.paymentView.revalidate();
+                            view.partPrices.clear();
+                            for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                                view.paymentList(part);
+                                view.partPrices.add(part.price);
+                            }
+                            double tempPrice = 0;
+                            for (Double price : view.partPrices) {
+                                tempPrice += price;
+                            }
+                            view.sum[model.currCart] = tempPrice;
+                            view.finalPrice.setText(Double.toString(view.sum[model.currCart]));
+                            view.cancelBackPanel.removeAll();
+                            java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
+                            if (imageURL != null) {
+                                ImageIcon originalIcon = new ImageIcon(imageURL);
+                                Image scaledImage = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                                view.backButtonPay.setIcon(new ImageIcon(scaledImage));
+                            } else {
+                                //System.err.println("Error: Unable to load back button icon");
+                                view.backButtonPay.setText("Back");
+                                view.backButtonPay.setFont(new Font("Verdana", Font.BOLD, 11));
+                            }
+                            view.cancelBackPanel.add(view.backButtonPay);
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.cancelBackPanel.add(new JPanel());
+                            view.paymentPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
                             view.displayScreen = view.paymentPanel;
                             view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
                             view.rightDisplay.repaint();
@@ -1040,15 +1072,38 @@ public class Controller {
                             view.receipt.setEnabled(false);
                             break;
                         case 3: view.rightDisplay.remove(view.displayScreen);
-                            view.displayScreen = view.receiptPanel;
-                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                            view.rightDisplay.repaint();
-                            view.rightDisplay.revalidate();
+                            view.receiptView.removeAll();
+                            view.receiptView.repaint();
+                            view.receiptView.revalidate();
+                            for (Part part : model.shoppingCarts.get(model.currCart).parts) {
+                                view.receiptList(part);
+                                for (Part data: model.parts)
+                                    if(data.equals(part))
+                                        if(data.quantity >= part.quantity){
+                                            data.quantity -= part.quantity;
+                                            if(data.quantity == 0) {
+                                                JOptionPane.showMessageDialog(view, data.name + " has run out, please resupply");
+                                            }
+                                            model.tableModel.changeParts(model.parts);
+                                            if (model.tableModel.getRowCount() != 0)
+                                                model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
 
-                            view.cart.setEnabled(false);
-                            view.checkout.setEnabled(false);
-                            view.payment.setEnabled(false);
-                            view.receipt.setEnabled(true);
+                                            view.finalPrice.getText();
+                                            view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
+                                            view.cancelBackPanel.removeAll();
+                                            view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+
+                                            view.displayScreen = view.receiptPanel;
+                                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                            view.rightDisplay.repaint();
+                                            view.rightDisplay.revalidate();
+
+                                            view.cart.setEnabled(false);
+                                            view.checkout.setEnabled(false);
+                                            view.payment.setEnabled(false);
+                                            view.receipt.setEnabled(true);
+                                        }
+                            }
                             break;
                     }
 
@@ -1109,6 +1164,7 @@ public class Controller {
                 view.paymentView.removeAll();
                 view.paymentView.repaint();
                 view.paymentView.revalidate();
+                view.partPrices.clear();
                 for (Part part : model.shoppingCarts.get(model.currCart).parts) {
                     view.paymentList(part);
                     view.partPrices.add(part.price);
@@ -1117,7 +1173,8 @@ public class Controller {
                 for (Double price : view.partPrices) {
                     tempPrice += price;
                 }
-                view.finalPrice.setText(Double.toString(tempPrice));
+                view.sum[model.currCart] = tempPrice;
+                view.finalPrice.setText(Double.toString(view.sum[model.currCart]));
                 view.cancelBackPanel.removeAll();
                 java.net.URL imageURL = getClass().getClassLoader().getResource("images/back_button.png");
                 if (imageURL != null) {
@@ -1227,7 +1284,7 @@ public class Controller {
                 */
                 CreateFile();
                 WriteToFile(view.receiptCtr, model.shoppingCarts.get(model.currCart).parts, Double.parseDouble(view.finalPrice.getText()));
-                System.out.println(view.sum);
+
                 ShoppingCart currentCart = model.shoppingCarts.get(model.currCart);
                 currentCart.parts.clear();
                 view.partPrices.clear();
@@ -1302,6 +1359,7 @@ public class Controller {
         view.backButtonPay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                view.partPrices.clear();
                 view.cartNum[model.currCart] = 1;
                 System.out.print("TESTING");
                 view.rightDisplay.remove(view.displayScreen);

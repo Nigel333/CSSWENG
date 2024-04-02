@@ -1,0 +1,5 @@
+---------------------------------------------------------------------
+SUZUKI	SEDAN	IGNITION MODULE	2022	AURA
+SUZUKI	CROSSOVER	MASS AIR FLOW SENSOR	2023	QUASAR
+---------------------------------------------------------------------
+Total: P70.5

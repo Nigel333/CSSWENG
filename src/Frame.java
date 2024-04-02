@@ -42,7 +42,7 @@ public class Frame extends JFrame {
     ArrayList<CartButton> cartButtons = new ArrayList<>();
     int[] cartNum = new int[5];
     ArrayList<Double> partPrices = new ArrayList<>();
-    Double sum = 0.0;
+    Double[] sum = new Double[5];
     int receiptCtr = 1;
     String date;
     public Frame(Main model) {
@@ -540,10 +540,6 @@ public class Frame extends JFrame {
     }
     public void paymentList(Part part)
     {
-        /* FOR SPRINT 3
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        */
         JLabel label = new JLabel();
 
         label.setText("<html>\n" +
@@ -554,11 +550,6 @@ public class Frame extends JFrame {
                 "        <p>" + "QTY: " + part.quantity + "  |  P" + part.price + " | " + "</p></p>\n" +
                 "    </body>\n" +
                 "</html>");
-        /* FOR SPRINT 3
-        panel.add(label);
-        JTextField textField = new JTextField(5);
-        panel.add(textField);
-         */
 
 
         paymentView.add(label);
