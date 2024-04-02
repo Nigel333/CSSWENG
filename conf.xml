@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>C:\Users\Hunte\OneDrive\Documents\GitHub\CSSWENG\out\artifacts\CSSWENG_jar\CSSWENG.jar</jar>
-  <outfile>C:\Users\Hunte\OneDrive\Documents\GitHub\CSSWENG\out\artifacts\CSSWENG_jar\CSSWENG.exe</outfile>
+  <outfile>C:\Users\Hunte\OneDrive\Documents\GitHub\CSSWENG\out\artifacts\CSSWENG_jar\cssweng.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
