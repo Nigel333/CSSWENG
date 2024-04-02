@@ -1121,7 +1121,7 @@ public class Controller {
                                                 model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
 
                                             view.finalPrice.getText();
-                                            view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
+
                                             view.cancelBackPanel.removeAll();
                                             view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
@@ -1136,6 +1136,7 @@ public class Controller {
                                             view.receipt.setEnabled(true);
                                         }
                             }
+                            view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
                             break;
                     }
 
@@ -1282,7 +1283,7 @@ public class Controller {
                                         model.tableModel.fireTableRowsUpdated(0, model.tableModel.getRowCount() - 1);
 
                                     view.finalPrice.getText();
-                                    view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
+
                                     view.cancelBackPanel.removeAll();
                                     view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
@@ -1297,8 +1298,7 @@ public class Controller {
                                     view.receipt.setEnabled(true);
                                 }
                     }
-
-                }
+                    view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);                }
             }
         });
         view.printButton.addActionListener(new ActionListener() {
