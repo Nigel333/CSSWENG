@@ -1110,24 +1110,22 @@ public class Controller {
                             for (Part part : model.shoppingCarts.get(model.currCart).parts) {
                                 view.receiptList(part);
                                 for (Part data: model.parts)
-                                    if(data.equals(part))
-                                        if(data.quantity >= part.quantity){
-                                            
-                                            view.finalPrice.getText();
+                                    if(data.equals(part)){
+                                        view.finalPrice.getText();
 
-                                            view.cancelBackPanel.removeAll();
-                                            view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
+                                        view.cancelBackPanel.removeAll();
+                                        view.receiptPanel.add(view.cancelBackPanel, BorderLayout.NORTH);
 
-                                            view.displayScreen = view.receiptPanel;
-                                            view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
-                                            view.rightDisplay.repaint();
-                                            view.rightDisplay.revalidate();
+                                        view.displayScreen = view.receiptPanel;
+                                        view.rightDisplay.add(view.displayScreen, BorderLayout.CENTER);
+                                        view.rightDisplay.repaint();
+                                        view.rightDisplay.revalidate();
 
-                                            view.cart.setEnabled(false);
-                                            view.checkout.setEnabled(false);
-                                            view.payment.setEnabled(false);
-                                            view.receipt.setEnabled(true);
-                                        }
+                                        view.cart.setEnabled(false);
+                                        view.checkout.setEnabled(false);
+                                        view.payment.setEnabled(false);
+                                        view.receipt.setEnabled(true);
+                                    }
                             }
                             view.receiptListTotal(model.shoppingCarts.get(model.currCart).finalPrice);
                             break;
