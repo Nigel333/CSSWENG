@@ -1191,7 +1191,7 @@ public class Controller {
                 view.partPrices.clear();
                 for (Part part : model.shoppingCarts.get(model.currCart).parts) {
                     view.paymentList(part);
-                    view.partPrices.add(part.price);
+                    view.partPrices.add(part.price * part.quantity);
                 }
                 double tempPrice = 0;
                 for (Double price : view.partPrices) {
