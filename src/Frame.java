@@ -526,11 +526,13 @@ public class Frame extends JFrame {
     public void checkoutList(Part part)
     {
         JLabel label = new JLabel();
+        String newOrNot = part.isNew ? "NEW":"OLD";
         label.setText("<html>\n" +
                 "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
                 "        <p>"+ part.carBrand + "</p>\n" +
-                "        <p>" + part.carModel + " | " + part.name  + "(" + part.year + ")</p>\n" +
-                "        <p>" + part.authenticity + " | " + part.isNew + "</p>\n" +
+                "        <p>" + part.carModel + "</p>\n" +
+                "        <p>" + part.name  + "(" + part.year + ")</p>\n" +
+                "        <p>" + part.authenticity + " | " + newOrNot + "</p>\n" +
                 "        <p>" + "P" + part.price + " | QTY: " + part.quantity + "</p>\n" +
                 "    </body>\n" +
                 "</html>");
@@ -674,11 +676,13 @@ class PartLabel extends JLabel {
 
     public void setText()
     {
+        String newOrNot = part.isNew ? "NEW":"OLD";
         this.setText("<html>\n" +
                 "    <body style=\"background-color: cyan; border-radius: 4px; border-style: solid;\">\n" +
                 "        <p>"+ part.carBrand + "</p>\n" +
-                "        <p>" + part.carModel + " | " + part.name  + "(" + part.year + ")</p>\n" +
-                "        <p>" + part.authenticity + " | " + part.isNew + "</p>\n" +
+                "        <p>" + part.carModel + "</p>\n" +
+                "        <p>" + part.name  + "(" + part.year + ")</p>\n" +
+                "        <p>" + part.authenticity + " | " + newOrNot + "</p>\n" +
                 "        <p>" + "P" + part.price + " | QTY: " + part.quantity + "</p>\n" +
                 "    </body>\n" +
                 "</html>");
