@@ -55,9 +55,9 @@ public class Frame extends JFrame {
             {
                 Component c = super.prepareRenderer(renderer, row, column);
                 JComponent jc = (JComponent)c;
-                jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.DARK_GRAY));
-                jc.setBackground(Color.LIGHT_GRAY);
-                jc.setForeground(Color.BLACK);
+                jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.LIGHT_GRAY));
+                jc.setBackground(Color.decode("#616060"));
+                jc.setForeground(Color.WHITE);
                 jc.setFont(new Font("Verdana", Font.BOLD, 11));
 
                 return c;
@@ -78,7 +78,7 @@ public class Frame extends JFrame {
         partTable.getColumnModel().getColumn(7).setPreferredWidth(10);
 
         partTable.setShowGrid(false);
-        partTable.setBackground(Color.DARK_GRAY);
+        partTable.setBackground(Color.LIGHT_GRAY);
 
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -176,11 +176,11 @@ public class Frame extends JFrame {
 
         marginPanelTable = new JPanel(new BorderLayout());
         marginPanelTable.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        marginPanelTable.setBackground(Color.DARK_GRAY);
+        marginPanelTable.setBackground(Color.LIGHT_GRAY);
 
         marginPanelSearch = new JPanel(new BorderLayout());
         marginPanelSearch.setBorder(BorderFactory.createEmptyBorder(5,5,10,5));
-        marginPanelSearch.setBackground(Color.DARK_GRAY);
+        marginPanelSearch.setBackground(Color.LIGHT_GRAY);
 
         middlePanel = new JPanel(new BorderLayout());
         middlePanel.setBackground(Color.LIGHT_GRAY);
@@ -192,10 +192,10 @@ public class Frame extends JFrame {
 
         tablePanel = new JPanel(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(partTable);
-        scrollPane.setBackground(Color.DARK_GRAY);
+        scrollPane.setBackground(Color.LIGHT_GRAY);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        tablePanel.setBackground(Color.DARK_GRAY);
+        tablePanel.setBackground(Color.LIGHT_GRAY);
         tablePanel.add(scrollPane, BorderLayout.NORTH);
         marginPanelTable.add(tablePanel, BorderLayout.CENTER);
         middlePanel.add(marginPanelTable, BorderLayout.CENTER);
