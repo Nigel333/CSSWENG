@@ -206,14 +206,17 @@ public class Controller {
                     JDialog dialog = new JDialog(view, "Manager Settings", true);
                     JPanel panel = new JPanel(new BorderLayout());
                     panel.setBackground(Color.ORANGE);
+
                     JPanel optionPanel = new JPanel(new FlowLayout());
                     optionPanel.setBackground(Color.ORANGE);
+
                     JButton add = new JButton("ADD");
-                    add.setPreferredSize(new Dimension(200, 30));
+                    add.setPreferredSize(new Dimension(250, 30));
                     JButton update = new JButton("UPDATE");
-                    update.setPreferredSize(new Dimension(200, 30));
+                    update.setPreferredSize(new Dimension(250, 30));
                     JButton delete = new JButton("DELETE");
-                    delete.setPreferredSize(new Dimension(200, 30));
+                    delete.setPreferredSize(new Dimension(250, 30));
+
                     optionPanel.add(add);
                     optionPanel.add(update);
                     optionPanel.add(delete);
@@ -229,6 +232,7 @@ public class Controller {
                     addPanel.setBackground(Color.ORANGE);
                     GridBagConstraints gbc = new GridBagConstraints();
                     gbc.insets = new Insets(5, 5, 5, 5);
+
                     JButton addButton = new JButton("ADD");
                     JTextField carBrand = new JTextField(20);
                     JTextField carModel = new JTextField(20);
@@ -236,6 +240,7 @@ public class Controller {
                     JTextField year = new JTextField(20);
                     JTextField quantity = new JTextField(20);
                     JTextField price = new JTextField(20);
+
                     JComboBox condition = new JComboBox(new String[]{"NEW", "OLD"});
                     JComboBox authenticity1 = new JComboBox(new String[]{"ORIGINAL", "CLASS A", "OTHERS"});
                     JTextField authenticity2 = new JTextField(15);
@@ -466,8 +471,8 @@ public class Controller {
                         {
                             Component c = super.prepareRenderer(renderer, row, column);
                             JComponent jc = (JComponent)c;
-                            jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#92D050")));
-                            jc.setBackground(Color.decode("#385723"));
+                            jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#f7c163")));
+                            jc.setBackground(Color.decode("#b85702"));
                             jc.setForeground(Color.WHITE);
                             jc.setFont(new Font("Verdana", Font.BOLD, 11));
                             return c;
@@ -794,7 +799,7 @@ public class Controller {
                         }
                     });
                     JScrollPane scrollPane = new JScrollPane(updateTable);
-                    scrollPane.setBackground(Color.decode("#92D050"));
+                    scrollPane.setBackground(Color.decode("#f7c163"));
                     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                     update1.add(scrollPane, BorderLayout.CENTER);
@@ -850,8 +855,8 @@ public class Controller {
                         {
                             Component c = super.prepareRenderer(renderer, row, column);
                             JComponent jc = (JComponent)c;
-                            jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#92D050")));
-                            jc.setBackground(Color.decode("#385723"));
+                            jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#f7c163")));
+                            jc.setBackground(Color.decode("#b85702"));
                             jc.setForeground(Color.WHITE);
                             jc.setFont(new Font("Verdana", Font.BOLD, 11));
                             return c;
@@ -901,7 +906,7 @@ public class Controller {
                     });
 
                     scrollPane = new JScrollPane(deleteTable);
-                    scrollPane.setBackground(Color.decode("#92D050"));
+                    scrollPane.setBackground(Color.decode("#f7c163"));
                     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                     JTextField searchBar2 = new JTextField();
