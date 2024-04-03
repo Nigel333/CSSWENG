@@ -55,9 +55,9 @@ public class Frame extends JFrame {
             {
                 Component c = super.prepareRenderer(renderer, row, column);
                 JComponent jc = (JComponent)c;
-                jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.decode("#92D050")));
-                jc.setBackground(Color.decode("#385723"));
-                jc.setForeground(Color.WHITE);
+                jc.setBorder(new MatteBorder(0, 0, 10, 0, Color.DARK_GRAY));
+                jc.setBackground(Color.LIGHT_GRAY);
+                jc.setForeground(Color.BLACK);
                 jc.setFont(new Font("Verdana", Font.BOLD, 11));
 
                 return c;
@@ -78,7 +78,7 @@ public class Frame extends JFrame {
         partTable.getColumnModel().getColumn(7).setPreferredWidth(10);
 
         partTable.setShowGrid(false);
-        partTable.setBackground(Color.decode("#92D050"));
+        partTable.setBackground(Color.DARK_GRAY);
 
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -176,14 +176,14 @@ public class Frame extends JFrame {
 
         marginPanelTable = new JPanel(new BorderLayout());
         marginPanelTable.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        marginPanelTable.setBackground(Color.decode("#92D050"));
+        marginPanelTable.setBackground(Color.DARK_GRAY);
 
         marginPanelSearch = new JPanel(new BorderLayout());
         marginPanelSearch.setBorder(BorderFactory.createEmptyBorder(5,5,10,5));
-        marginPanelSearch.setBackground(Color.decode("#92D050"));
+        marginPanelSearch.setBackground(Color.DARK_GRAY);
 
         middlePanel = new JPanel(new BorderLayout());
-        middlePanel.setBackground(Color.decode("#92D050"));
+        middlePanel.setBackground(Color.LIGHT_GRAY);
         searchField = new JTextField();
         searchField.setFont(new Font("Verdana", Font.BOLD, 18));
         middlePanel.add(searchField, BorderLayout.CENTER);
@@ -192,10 +192,10 @@ public class Frame extends JFrame {
 
         tablePanel = new JPanel(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(partTable);
-        scrollPane.setBackground(Color.decode("#92D050"));
+        scrollPane.setBackground(Color.DARK_GRAY);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        tablePanel.setBackground(Color.decode("#92D050"));
+        tablePanel.setBackground(Color.DARK_GRAY);
         tablePanel.add(scrollPane, BorderLayout.NORTH);
         marginPanelTable.add(tablePanel, BorderLayout.CENTER);
         middlePanel.add(marginPanelTable, BorderLayout.CENTER);
@@ -372,11 +372,6 @@ public class Frame extends JFrame {
         account.setMargin(new Insets(0, 0, 0, 0));
         account.setContentAreaFilled(false);
         accountPanel.add(account, BorderLayout.WEST);
-
-        ImageIcon settingIcon = new ImageIcon("resources/settings.png");
-        setting = new JLabel(settingIcon);
-        setting.setBorder(new EmptyBorder(0, 0, 0, 10));
-        accountPanel.add(setting, BorderLayout.EAST);
 
         leftPanel.add(logoAndTimePanel, BorderLayout.NORTH);
         leftPanel.add(accountPanel, BorderLayout.SOUTH);
