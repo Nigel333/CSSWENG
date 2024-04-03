@@ -1,5 +1,0 @@
----------------------------------------------------------------------
-TOYOTA	TRUCK	COOLANT TEMPERATURE SENSOR	2022	XENON
-SUZUKI	TRUCK	COOLANT TEMPERATURE SENSOR	2022	XENON
----------------------------------------------------------------------
-Total: P200.0
